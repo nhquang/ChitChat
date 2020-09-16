@@ -10,7 +10,7 @@ namespace ChitChat
     public class Database : IDisposable
     {
         private SqlConnection sql { get; set; }
-        private SqlCommand SqlCommand { get;set }
+        private SqlCommand SqlCommand { get; set; }
 
         public Database()
         {
