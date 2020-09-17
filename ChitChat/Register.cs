@@ -21,5 +21,10 @@ namespace ChitChat
         {
 
         }
+
+        private void regBtn_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

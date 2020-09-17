@@ -39,7 +39,7 @@
             this.male = new System.Windows.Forms.RadioButton();
             this.genderLbl = new System.Windows.Forms.Label();
             this.female = new System.Windows.Forms.RadioButton();
-            this.signInBtn = new System.Windows.Forms.Button();
+            this.regBtn = new System.Windows.Forms.Button();
             this.notes = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
@@ -154,20 +154,21 @@
             this.female.Text = "Female";
             this.female.UseVisualStyleBackColor = true;
             // 
-            // signInBtn
+            // regBtn
             // 
-            this.signInBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.regBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.signInBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.signInBtn.BackColor = System.Drawing.Color.Orange;
-            this.signInBtn.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.signInBtn.Location = new System.Drawing.Point(215, 345);
-            this.signInBtn.Name = "signInBtn";
-            this.signInBtn.Size = new System.Drawing.Size(372, 54);
-            this.signInBtn.TabIndex = 17;
-            this.signInBtn.Text = "Start";
-            this.signInBtn.UseVisualStyleBackColor = false;
+            this.regBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.regBtn.BackColor = System.Drawing.Color.Orange;
+            this.regBtn.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.regBtn.Location = new System.Drawing.Point(215, 345);
+            this.regBtn.Name = "regBtn";
+            this.regBtn.Size = new System.Drawing.Size(372, 54);
+            this.regBtn.TabIndex = 17;
+            this.regBtn.Text = "Register";
+            this.regBtn.UseVisualStyleBackColor = false;
+            this.regBtn.Click += new System.EventHandler(this.regBtn_Click);
             // 
             // notes
             // 
@@ -184,7 +185,7 @@
             this.BackColor = System.Drawing.Color.AliceBlue;
             this.ClientSize = new System.Drawing.Size(634, 411);
             this.Controls.Add(this.notes);
-            this.Controls.Add(this.signInBtn);
+            this.Controls.Add(this.regBtn);
             this.Controls.Add(this.female);
             this.Controls.Add(this.genderLbl);
             this.Controls.Add(this.male);
@@ -217,7 +218,7 @@
         private System.Windows.Forms.RadioButton male;
         private System.Windows.Forms.Label genderLbl;
         private System.Windows.Forms.RadioButton female;
-        private System.Windows.Forms.Button signInBtn;
+        private System.Windows.Forms.Button regBtn;
         private System.Windows.Forms.RichTextBox notes;
     }
 }

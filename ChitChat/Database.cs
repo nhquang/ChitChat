@@ -38,9 +38,7 @@ namespace ChitChat
             sqlCommand_ = new SqlCommand(proc, sql_);
             sqlCommand_.CommandType = System.Data.CommandType.StoredProcedure;
             foreach(var item in data)
-            {
                 sqlCommand_.Parameters.Add(new SqlParameter(item.Key, item.Value));
-            }
             sqlCommand_.ExecuteReader();
         }
 
@@ -61,7 +59,7 @@ namespace ChitChat
                 // TODO: set large fields to null.
                 if(sql_?.State == System.Data.ConnectionState.Open)
                     sql_.Dispose();
-    
+                sqlCommand_?.Dispose();
                 disposedValue = true;
             }
         }
