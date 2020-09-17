@@ -4,21 +4,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Configuration;
+using System.Windows.Forms;
 
 namespace ChitChat
 {
     public class Database : IDisposable
     {
-        private SqlConnection sql { get; set; }
-        private SqlCommand SqlCommand { get; set; }
+        private SqlConnection sql_ { get; set; }
+        private SqlCommand sqlCommand_ { get; set; }
 
         public Database()
         {
-            sql = new SqlConnection();
+            sql_ = new SqlConnection(ConfigurationSettings.AppSettings["connectionString"].Trim());
+            if (sql_.State == System.Data.ConnectionState.Closed)
+                sql_.Open();
 
         }
-        
+        public void addUser(User user)
+        {
+            var data = new Dictionary<string, object>();
+            data.Add("@name_", user.name_);
+            data.Add("@username_", user.username_);
+            data.Add("@pass", user.pass_);
+            data.Add("@age_", user.age_);
+            data.Add("@male_", user.male_);
+            data.Add("@note", user.note_);
 
+            this.executeStoredProcedure("AddUser", data);
+        }
+        private void executeStoredProcedure(string proc, Dictionary<string,object> data)
+        {
+            sqlCommand_ = new SqlCommand(proc, sql_);
+            sqlCommand_.CommandType = System.Data.CommandType.StoredProcedure;
+            foreach(var item in data)
+            {
+                sqlCommand_.Parameters.Add(new SqlParameter(item.Key, item.Value));
+            }
+            sqlCommand_.ExecuteReader();
+        }
 
 
         #region IDisposable Support
@@ -35,7 +59,9 @@ namespace ChitChat
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
-
+                if(sql_?.State == System.Data.ConnectionState.Open)
+                    sql_.Dispose();
+    
                 disposedValue = true;
             }
         }
