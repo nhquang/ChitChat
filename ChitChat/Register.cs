@@ -24,7 +24,60 @@ namespace ChitChat
 
         private void regBtn_Click(object sender, EventArgs e)
         {
+            bool pass = false;
 
+            #region Validation
+            if (Validation.onlyLettersVal(name.Text))
+            {
+                if (Validation.LettersAndNum(username.Text) && username.Text.Length <= 20)
+                {
+                    if (Validation.LettersAndNum(pwd.Text) && pwd.Text.Length <= 16)
+                    {
+                        using (var database = new Database())
+                        {
+                            User user = new User(username.Text);
+                            if (!database.findUser(user)) pass = true;
+                            else MessageBox.Show("Username already exists.");
+                        }
+                    }
+                    else MessageBox.Show("Password can only contain letters and numbers.");
+                }
+                else MessageBox.Show("Username can only contain letters and numbers.");
+            }
+            else MessageBox.Show("Name can contain letters only.");
+            #endregion
+
+            if (pass)
+            {
+                User user = new User(name.Text, username.Text, hashPassword(pwd.Text), null, male.Checked, notes.Text);
+
+                try
+                {
+                    using(var database = new Database())
+                    {
+                        database.addUser(user);
+                    }
+                    MessageBox.Show("You have successfully registered!");
+                    this.Close();
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    var logs = new Logs();
+                    logs.writeException(ex);
+                }
+                
+            }
+            
+
+
+        }
+
+        private string hashPassword(string input)
+        {
+            byte[] data = System.Text.Encoding.ASCII.GetBytes(input);
+            data = new System.Security.Cryptography.SHA256Managed().ComputeHash(data);
+            return System.Text.Encoding.ASCII.GetString(data);           
         }
     }
 }

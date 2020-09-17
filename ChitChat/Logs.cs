@@ -15,11 +15,15 @@ namespace ChitChat
 
         public Logs()
         {
-            fileLocation = ConfigurationSettings.AppSettings["logPath"].Trim();
+            fileLocation = ConfigurationSettings.AppSettings["logPath"].Trim() + Environment.UserName + @"\Documents\ChitChat\logs";
+
+            if (!Directory.Exists(fileLocation)) Directory.CreateDirectory(fileLocation);
+            fileLocation += "\\logs.txt";
+
             if(!File.Exists(fileLocation))
                 using(FileStream fs = File.Create(fileLocation))
                 {
-
+                    
                 }
             
                 
@@ -30,7 +34,7 @@ namespace ChitChat
             {
                 sw.WriteLine(DateTime.UtcNow.Month + "-" + DateTime.UtcNow.Day + "-" + DateTime.UtcNow.Year + " " + DateTime.UtcNow.Hour + ":" + DateTime.UtcNow.Minute + ":" + DateTime.UtcNow.Second);
                 sw.WriteLine(ex.Message);
-                sw.WriteLine(ex.HResult);
+                //sw.WriteLine(ex.HResult);
                 sw.WriteLine(ex.InnerException);
                 sw.WriteLine(ex.StackTrace);
                 sw.WriteLine("++++++++++++++++++++++++++++++++++++++++++++");

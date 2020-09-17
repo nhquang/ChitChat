@@ -60,14 +60,14 @@
             this.username.Location = new System.Drawing.Point(359, 154);
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(228, 20);
-            this.username.TabIndex = 8;
+            this.username.TabIndex = 4;
             // 
             // name
             // 
             this.name.Location = new System.Drawing.Point(359, 44);
             this.name.Name = "name";
             this.name.Size = new System.Drawing.Size(228, 20);
-            this.name.TabIndex = 7;
+            this.name.TabIndex = 1;
             // 
             // usrLbl
             // 
@@ -97,7 +97,7 @@
             this.pwd.Name = "pwd";
             this.pwd.PasswordChar = '*';
             this.pwd.Size = new System.Drawing.Size(228, 20);
-            this.pwd.TabIndex = 11;
+            this.pwd.TabIndex = 5;
             // 
             // noteLbl
             // 
@@ -123,11 +123,12 @@
             // 
             // male
             // 
+            this.male.Checked = true;
             this.male.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.male.Location = new System.Drawing.Point(359, 96);
             this.male.Name = "male";
             this.male.Size = new System.Drawing.Size(83, 24);
-            this.male.TabIndex = 14;
+            this.male.TabIndex = 2;
             this.male.TabStop = true;
             this.male.Text = "Male";
             this.male.UseVisualStyleBackColor = true;
@@ -149,8 +150,7 @@
             this.female.Location = new System.Drawing.Point(495, 96);
             this.female.Name = "female";
             this.female.Size = new System.Drawing.Size(92, 24);
-            this.female.TabIndex = 16;
-            this.female.TabStop = true;
+            this.female.TabIndex = 3;
             this.female.Text = "Female";
             this.female.UseVisualStyleBackColor = true;
             // 
@@ -175,7 +175,7 @@
             this.notes.Location = new System.Drawing.Point(359, 279);
             this.notes.Name = "notes";
             this.notes.Size = new System.Drawing.Size(228, 44);
-            this.notes.TabIndex = 18;
+            this.notes.TabIndex = 15;
             this.notes.Text = "";
             // 
             // Register

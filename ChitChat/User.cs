@@ -14,18 +14,19 @@ namespace ChitChat
         public int age_ { get; private set; }
         public bool male_ { get; private set; }
         public string note_ { get; private set; }
-        public User(string name, string username, string pass, int age, bool male, string note)
+        public User(string name, string username, string pass, int? age, bool male, string note)
         {
             name_ = name;
             username_ = username;
             pass_ = pass;
-            age_ = age;
+            if (age.HasValue) age_ = age.Value;
+            else age_ = 0;
             male_ = male;
             note_ = note;
         }
-        public User()
+        public User(string username)
         {
-            
+            username_ = username;
         }
          
     }

@@ -26,21 +26,33 @@ namespace ChitChat
             var data = new Dictionary<string, object>();
             data.Add("@name_", user.name_);
             data.Add("@username_", user.username_);
-            data.Add("@pass", user.pass_);
+            data.Add("@pass_", user.pass_);
             data.Add("@age_", user.age_);
             data.Add("@male_", user.male_);
-            data.Add("@note", user.note_);
+            data.Add("@note_", user.note_);
 
-            this.executeStoredProcedure("AddUser", data);
+            this.constructStoredProcedure("AddUser", data);
+            sqlCommand_.ExecuteNonQuery();
         }
-        private void executeStoredProcedure(string proc, Dictionary<string,object> data)
+        public bool findUser(User user)
+        {
+            var data = new Dictionary<string, object>();
+            data.Add("@Username", user.username_);
+            this.constructStoredProcedure("SelectUser", data);
+            var rslt = sqlCommand_.ExecuteReader();
+            bool hasRows = rslt.HasRows;
+            rslt.Close();
+            return hasRows;
+        }
+        private void constructStoredProcedure(string proc, Dictionary<string,object> parameters)
         {
             sqlCommand_ = new SqlCommand(proc, sql_);
             sqlCommand_.CommandType = System.Data.CommandType.StoredProcedure;
-            foreach(var item in data)
+            foreach(var item in parameters)
                 sqlCommand_.Parameters.Add(new SqlParameter(item.Key, item.Value));
-            sqlCommand_.ExecuteReader();
+            //sqlCommand_.ExecuteReader();
         }
+        
 
 
         #region IDisposable Support

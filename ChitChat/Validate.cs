@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChitChat
 {
-    public static class Validate
+    public static class Validation
     {
         public static bool onlyLettersVal(string name)
         {
@@ -21,11 +21,6 @@ namespace ChitChat
             return pattern.IsMatch(num);
         }
 
-        /*public bool usernameVal(string usr)
-        {
-            Regex pattern = new Regex(@"^[0-9a-zA-Z]*$");
-            return pattern.IsMatch(usr);
-        }*/
         public static bool LettersAndNum(string val)
         {
             Regex pattern = new Regex(@"^[0-9a-zA-Z]+$");
