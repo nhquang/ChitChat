@@ -72,7 +72,7 @@
             this.Controls.Add(this.img);
             this.Controls.Add(this.signInBtn);
             this.Name = "Welcome";
-            this.Text = "Form1";
+            this.Text = "Welcome";
             this.Load += new System.EventHandler(this.Welcome_Load);
             ((System.ComponentModel.ISupportInitialize)(this.img)).EndInit();
             this.ResumeLayout(false);

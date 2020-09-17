@@ -20,5 +20,13 @@ namespace ChitChat
         {
             
         }
+
+        private void regBtn_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            var reg = new Register();
+            reg.Show();
+            reg.Closed += (s, args) => this.Show();
+        }
     }
 }
