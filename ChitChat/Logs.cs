@@ -15,7 +15,7 @@ namespace ChitChat
 
         public Logs()
         {
-            fileLocation = ConfigurationSettings.AppSettings["logPath"].Trim() + Environment.UserName + @"\Documents\ChitChat\logs";
+            fileLocation = ConfigurationSettings.AppSettings["logPath"].Trim().Replace("{user}", Environment.UserName);
 
             if (!Directory.Exists(fileLocation)) Directory.CreateDirectory(fileLocation);
             fileLocation += "\\logs.txt";

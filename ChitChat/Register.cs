@@ -25,50 +25,58 @@ namespace ChitChat
         private void regBtn_Click(object sender, EventArgs e)
         {
             bool pass = false;
-
-            #region Validation
-            if (Validation.onlyLettersVal(name.Text))
+            try
             {
-                if (Validation.LettersAndNum(username.Text) && username.Text.Length <= 20)
+                #region Validation
+                if (Validation.onlyLettersVal(name.Text))
                 {
-                    if (Validation.LettersAndNum(pwd.Text) && pwd.Text.Length <= 16)
+                    if (Validation.LettersAndNum(username.Text) && username.Text.Length <= 20)
+                    {
+                        if (Validation.LettersAndNum(pwd.Text) && pwd.Text.Length <= 16)
+                        {
+                            using (var database = new Database())
+                            {
+                                User user = new User(username.Text);
+                                if (!database.findUser(user)) pass = true;
+                                else MessageBox.Show("Username already exists.");
+                            }
+                        }
+                        else MessageBox.Show("Password can only contain letters and numbers.");
+                    }
+                    else MessageBox.Show("Username can only contain letters and numbers.");
+                }
+                else MessageBox.Show("Name can contain letters only.");
+                #endregion
+
+                if (pass)
+                {
+                    User user = new User(name.Text, username.Text, hashPassword(pwd.Text), null, male.Checked, notes.Text);
+
+                    try
                     {
                         using (var database = new Database())
                         {
-                            User user = new User(username.Text);
-                            if (!database.findUser(user)) pass = true;
-                            else MessageBox.Show("Username already exists.");
+                            database.addUser(user);
                         }
+                        MessageBox.Show("You have successfully registered!");
+                        this.Close();
                     }
-                    else MessageBox.Show("Password can only contain letters and numbers.");
-                }
-                else MessageBox.Show("Username can only contain letters and numbers.");
-            }
-            else MessageBox.Show("Name can contain letters only.");
-            #endregion
-
-            if (pass)
-            {
-                User user = new User(name.Text, username.Text, hashPassword(pwd.Text), null, male.Checked, notes.Text);
-
-                try
-                {
-                    using(var database = new Database())
+                    catch (Exception ex)
                     {
-                        database.addUser(user);
+                        //MessageBox.Show(ex.Message);
+                        //var logs = new Logs();
+                        //logs.writeException(ex);
+                        throw;
                     }
-                    MessageBox.Show("You have successfully registered!");
-                    this.Close();
+
                 }
-                catch(Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    var logs = new Logs();
-                    logs.writeException(ex);
-                }
-                
             }
-            
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                var logs = new Logs();
+                logs.writeException(ex);
+            }
 
 
         }
