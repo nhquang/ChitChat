@@ -16,7 +16,7 @@ namespace ChitChat
 
         public Database()
         {
-            sql_ = new SqlConnection(ConfigurationSettings.AppSettings["connectionString"].Trim());
+            sql_ = new SqlConnection(ConfigurationSettings.AppSettings["connectionString"].Trim().Replace("{your_password}", decryption(ConfigurationSettings.AppSettings["password"].Trim())));
             if (sql_.State == System.Data.ConnectionState.Closed)
                 sql_.Open();
 
@@ -52,8 +52,17 @@ namespace ChitChat
                 sqlCommand_.Parameters.Add(new SqlParameter(item.Key, item.Value));
             //sqlCommand_.ExecuteReader();
         }
-        
+        private static string encryption(string pwd)
+        {
+            byte[] bytes = Encoding.ASCII.GetBytes(pwd);
 
+            return Convert.ToBase64String(bytes);
+        }
+        private static string decryption(string encrypted)
+        {
+            byte[] bytes = Convert.FromBase64String(encrypted);
+            return Encoding.ASCII.GetString(bytes);
+        }
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
@@ -88,7 +97,7 @@ namespace ChitChat
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
         #endregion
 
