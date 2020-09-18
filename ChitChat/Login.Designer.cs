@@ -82,6 +82,7 @@
             // 
             this.pwd.Location = new System.Drawing.Point(323, 177);
             this.pwd.Name = "pwd";
+            this.pwd.PasswordChar = '*';
             this.pwd.Size = new System.Drawing.Size(228, 20);
             this.pwd.TabIndex = 4;
             // 
@@ -99,6 +100,7 @@
             this.signInBtn.TabIndex = 6;
             this.signInBtn.Text = "Sign in";
             this.signInBtn.UseVisualStyleBackColor = false;
+            this.signInBtn.Click += new System.EventHandler(this.signInBtn_Click);
             // 
             // regBtn
             // 

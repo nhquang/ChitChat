@@ -22,6 +22,13 @@ namespace ChitChat
 
         }
 
+        protected override void OnClosed(EventArgs e)
+        {
+
+            base.OnClosed(e);
+            this.Dispose();
+        }
+
         private void regBtn_Click(object sender, EventArgs e)
         {
             bool pass = false;
@@ -37,7 +44,7 @@ namespace ChitChat
                             using (var database = new Database())
                             {
                                 User user = new User(username.Text);
-                                if (!database.findUser(user)) pass = true;
+                                if (!database.UserExists(user)) pass = true;
                                 else MessageBox.Show("Username already exists.");
                             }
                         }
@@ -50,7 +57,7 @@ namespace ChitChat
 
                 if (pass)
                 {
-                    User user = new User(name.Text, username.Text, hashPassword(pwd.Text), null, male.Checked, notes.Text);
+                    User user = new User(name.Text, username.Text, Password.hashPassword(pwd.Text), null, male.Checked, notes.Text);
 
                     try
                     {
@@ -81,11 +88,6 @@ namespace ChitChat
 
         }
 
-        private string hashPassword(string input)
-        {
-            byte[] data = System.Text.Encoding.ASCII.GetBytes(input);
-            data = new System.Security.Cryptography.SHA256Managed().ComputeHash(data);
-            return System.Text.Encoding.ASCII.GetString(data);           
-        }
+        
     }
 }

@@ -16,7 +16,7 @@ namespace ChitChat
 
         public Database()
         {
-            sql_ = new SqlConnection(ConfigurationSettings.AppSettings["connectionString"].Trim().Replace("{your_password}", decryption(ConfigurationSettings.AppSettings["password"].Trim())));
+            sql_ = new SqlConnection(ConfigurationSettings.AppSettings["connectionString"].Trim().Replace("{your_password}", Password.decryption(ConfigurationSettings.AppSettings["password"].Trim())));
             if (sql_.State == System.Data.ConnectionState.Closed)
                 sql_.Open();
 
@@ -34,7 +34,8 @@ namespace ChitChat
             this.constructStoredProcedure("AddUser", data);
             sqlCommand_.ExecuteNonQuery();
         }
-        public bool findUser(User user)
+
+        public bool UserExists(User user)
         {
             var data = new Dictionary<string, object>();
             data.Add("@Username", user.username_);
@@ -44,25 +45,30 @@ namespace ChitChat
             rslt.Close();
             return hasRows;
         }
+
+        public string userPwd(User user)
+        {
+            string pwd = string.Empty;
+            var data = new Dictionary<string, object>();
+            data.Add("@Username", user.username_);
+            this.constructStoredProcedure("SelectUser", data);
+            var rslt = sqlCommand_.ExecuteReader();
+            while (rslt.Read())
+                pwd = rslt.GetString(3);
+            rslt.Close();
+            return pwd;
+        }
+
         private void constructStoredProcedure(string proc, Dictionary<string,object> parameters)
         {
             sqlCommand_ = new SqlCommand(proc, sql_);
             sqlCommand_.CommandType = System.Data.CommandType.StoredProcedure;
             foreach(var item in parameters)
                 sqlCommand_.Parameters.Add(new SqlParameter(item.Key, item.Value));
-            //sqlCommand_.ExecuteReader();
         }
-        private static string encryption(string pwd)
-        {
-            byte[] bytes = Encoding.ASCII.GetBytes(pwd);
 
-            return Convert.ToBase64String(bytes);
-        }
-        private static string decryption(string encrypted)
-        {
-            byte[] bytes = Convert.FromBase64String(encrypted);
-            return Encoding.ASCII.GetString(bytes);
-        }
+
+        
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

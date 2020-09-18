@@ -20,6 +20,12 @@ namespace ChitChat
         {
             
         }
+        protected override void OnClosed(EventArgs e)
+        {
+
+            base.OnClosed(e);
+            this.Dispose();
+        }
 
         private void regBtn_Click(object sender, EventArgs e)
         {
@@ -27,6 +33,43 @@ namespace ChitChat
             var reg = new Register();
             reg.Show();
             reg.Closed += (s, args) => this.Show();
+        }
+
+        private void signInBtn_Click(object sender, EventArgs e)
+        {
+            
+            if(Login.authentication(new Tuple<string, string>(usr.Text, pwd.Text)))
+            {
+                Dashboard dashboard= new Dashboard();
+                this.Hide();
+                dashboard.Show();
+                dashboard.Closed += (s, args) => this.Show();
+
+            }
+
+        }
+        private static bool authentication(Tuple<string,string> credentials)
+        {
+            User user = new User(credentials.Item1);
+            string temp = string.Empty;
+            try
+            {
+                using (var database = new Database())
+                {
+                    if (database.UserExists(user))
+                    {
+                        if (Password.hashPassword(credentials.Item2).Equals(database.userPwd(user)))
+                            return true;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Logs logs = new Logs();
+                logs.writeException(ex);
+                MessageBox.Show(ex.Message);
+            }
+            return false;
         }
     }
 }
