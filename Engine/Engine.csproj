@@ -57,5 +57,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChitChat\ChitChat.csproj">
+      <Project>{BC92927C-FCAC-4F5D-9655-815DEEF31F9D}</Project>
+      <Name>ChitChat</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
