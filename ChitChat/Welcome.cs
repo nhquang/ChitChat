@@ -28,6 +28,13 @@ namespace ChitChat
             var login = new Login();
             login.Show();
             login.Closed += (s, args) => this.Show();
+            
+        }
+        protected override void OnClosed(EventArgs e)
+        {
+
+            base.OnClosed(e);
+            this.Dispose();
         }
     }
 }

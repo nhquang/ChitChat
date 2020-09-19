@@ -42,7 +42,7 @@
             this.signInBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.signInBtn.BackColor = System.Drawing.Color.Orange;
             this.signInBtn.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.signInBtn.Location = new System.Drawing.Point(58, 323);
+            this.signInBtn.Location = new System.Drawing.Point(58, 332);
             this.signInBtn.Name = "signInBtn";
             this.signInBtn.Size = new System.Drawing.Size(177, 67);
             this.signInBtn.TabIndex = 0;
@@ -72,7 +72,7 @@
             this.Controls.Add(this.img);
             this.Controls.Add(this.signInBtn);
             this.Name = "Welcome";
-            this.Text = "Form1";
+            this.Text = "Welcome";
             this.Load += new System.EventHandler(this.Welcome_Load);
             ((System.ComponentModel.ISupportInitialize)(this.img)).EndInit();
             this.ResumeLayout(false);

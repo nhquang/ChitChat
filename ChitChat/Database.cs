@@ -4,22 +4,71 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Configuration;
+using System.Windows.Forms;
 
 namespace ChitChat
 {
     public class Database : IDisposable
     {
-        private SqlConnection sql { get; set; }
-        private SqlCommand SqlCommand { get; set; }
+        private SqlConnection sql_ { get; set; }
+        private SqlCommand sqlCommand_ { get; set; }
 
         public Database()
         {
-            sql = new SqlConnection();
+            sql_ = new SqlConnection(ConfigurationSettings.AppSettings["connectionString"].Trim().Replace("{your_password}", Password.decryption(ConfigurationSettings.AppSettings["password"].Trim())));
+            if (sql_.State == System.Data.ConnectionState.Closed)
+                sql_.Open();
 
         }
+        public void addUser(User user)
+        {
+            var data = new Dictionary<string, object>();
+            data.Add("@name_", user.name_);
+            data.Add("@username_", user.username_);
+            data.Add("@pass_", user.pass_);
+            data.Add("@age_", user.age_);
+            data.Add("@male_", user.male_);
+            data.Add("@note_", user.note_);
+
+            this.constructStoredProcedure("AddUser", data);
+            sqlCommand_.ExecuteNonQuery();
+        }
+
+        public bool UserExists(User user)
+        {
+            var data = new Dictionary<string, object>();
+            data.Add("@Username", user.username_);
+            this.constructStoredProcedure("SelectUser", data);
+            var rslt = sqlCommand_.ExecuteReader();
+            bool hasRows = rslt.HasRows;
+            rslt.Close();
+            return hasRows;
+        }
+
+        public string userPwd(User user)
+        {
+            string pwd = string.Empty;
+            var data = new Dictionary<string, object>();
+            data.Add("@Username", user.username_);
+            this.constructStoredProcedure("SelectUser", data);
+            var rslt = sqlCommand_.ExecuteReader();
+            while (rslt.Read())
+                pwd = rslt.GetString(3);
+            rslt.Close();
+            return pwd;
+        }
+
+        private void constructStoredProcedure(string proc, Dictionary<string,object> parameters)
+        {
+            sqlCommand_ = new SqlCommand(proc, sql_);
+            sqlCommand_.CommandType = System.Data.CommandType.StoredProcedure;
+            foreach(var item in parameters)
+                sqlCommand_.Parameters.Add(new SqlParameter(item.Key, item.Value));
+        }
+
+
         
-
-
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
@@ -35,7 +84,9 @@ namespace ChitChat
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
-
+                if(sql_?.State == System.Data.ConnectionState.Open)
+                    sql_.Dispose();
+                sqlCommand_?.Dispose();
                 disposedValue = true;
             }
         }
@@ -52,7 +103,7 @@ namespace ChitChat
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
         #endregion
 
