@@ -24,9 +24,8 @@ namespace ChitChat
 
         protected override void OnClosed(EventArgs e)
         {
-
-            base.OnClosed(e);
             this.Dispose();
+            base.OnClosed(e);
         }
 
         private void regBtn_Click(object sender, EventArgs e)

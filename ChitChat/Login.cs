@@ -22,9 +22,8 @@ namespace ChitChat
         }
         protected override void OnClosed(EventArgs e)
         {
-
-            base.OnClosed(e);
             this.Dispose();
+            base.OnClosed(e);
         }
 
         private void regBtn_Click(object sender, EventArgs e)
@@ -37,15 +36,15 @@ namespace ChitChat
 
         private void signInBtn_Click(object sender, EventArgs e)
         {
-            
-            if(Login.authentication(new Tuple<string, string>(usr.Text, pwd.Text)))
+
+            if (Login.authentication(new Tuple<string, string>(usr.Text, pwd.Text)))
             {
-                Dashboard dashboard= new Dashboard();
+                Dashboard dashboard = new Dashboard();
                 this.Hide();
                 dashboard.Show();
                 dashboard.Closed += (s, args) => this.Show();
-
             }
+            else MessageBox.Show("Username or Password is incorrect!");
 
         }
         private static bool authentication(Tuple<string,string> credentials)
