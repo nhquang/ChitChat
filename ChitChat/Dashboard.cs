@@ -12,9 +12,39 @@ namespace ChitChat
 {
     public partial class Dashboard : Form
     {
+        Listener listener = null;
         public Dashboard()
         {
             InitializeComponent();
+        }
+        private void Dashboard_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                this.listener = new Listener();
+                listener.OnStartAccessor(new string[] { });
+                
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void updateContent()
+        {
+            
+        }
+        protected override void OnClosed(EventArgs e)
+        {
+            try
+            {
+                listener?.OnStopAccessor();
+                base.OnClosed(e);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

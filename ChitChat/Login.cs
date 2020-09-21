@@ -18,7 +18,7 @@ namespace ChitChat
         }
         private void Login_Load(object sender, EventArgs e)
         {
-            
+
         }
         protected override void OnClosed(EventArgs e)
         {
