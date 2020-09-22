@@ -61,17 +61,12 @@ namespace ChitChat
             // TODO: Add code here to perform any tear-down necessary to stop your service.
             try
             {
-                if (worker_?.Status == TaskStatus.Running || worker_?.Status == TaskStatus.RanToCompletion)
-                {
-                    //worker_.Wait(cts_.Token);
-                    cts_.Cancel();
-                    var check = cts_.IsCancellationRequested;
-                    //worker_.Wait();
-                    worker_.Dispose();
-                }
+                cts_?.Cancel();
                 udpClient_?.Close();
                 udpClient_?.Dispose();
-                cts_.Dispose();
+                worker_?.Dispose();
+                cts_?.Dispose();
+                messages?.Dispose();
                 base.OnStop();
             }
             catch (Exception ex)
@@ -88,12 +83,9 @@ namespace ChitChat
             {
                 while (true)
                 {
-                    if (ct.IsCancellationRequested) ct.ThrowIfCancellationRequested();
+                    ct.ThrowIfCancellationRequested();
                     var received = await udpClient_.ReceiveAsync();
                     messages.Add(Encoding.ASCII.GetString(received.Buffer));
-                    //var received = udpClient_.ReceiveAsync();
-                    //messages.Add(Encoding.ASCII.GetString(received.Result.Buffer));
-                    //received.Dispose();
                 }
             }           
             catch(ObjectDisposedException ex)

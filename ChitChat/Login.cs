@@ -56,10 +56,8 @@ namespace ChitChat
                 using (var database = new Database())
                 {
                     if (database.UserExists(user))
-                    {
                         if (Password.hashPassword(credentials.Item2).Equals(database.userPwd(user)))
                             return true;
-                    }
                 }
             }
             catch(Exception ex)
