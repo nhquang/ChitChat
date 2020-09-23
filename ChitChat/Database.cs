@@ -59,6 +59,19 @@ namespace ChitChat
             return pwd;
         }
 
+        public void selectUser(ref User user)
+        {
+            var data = new Dictionary<string, object>();
+            data.Add("@username", user.username_);
+            this.constructStoredProcedure("SelectUser", data);
+            var rslt = sqlCommand_.ExecuteReader();
+            while (rslt.Read())
+            {
+                user = new User(rslt.GetString(1), rslt.GetString(2), null, null, (bool)rslt.GetValue(5), rslt.GetString(6));
+            }
+            rslt.Close();
+        }
+
         private void constructStoredProcedure(string proc, Dictionary<string,object> parameters)
         {
             sqlCommand_ = new SqlCommand(proc, sql_);

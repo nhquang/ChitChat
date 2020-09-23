@@ -39,10 +39,11 @@ namespace ChitChat
 
             if (Login.authentication(new Tuple<string, string>(usr.Text, pwd.Text)))
             {
-                Dashboard dashboard = new Dashboard();
+                SelectFriendToChat selectFriendToChat = new SelectFriendToChat(new User(usr.Text));
                 this.Hide();
-                dashboard.Show();
-                dashboard.Closed += (s, args) => this.Show();
+                selectFriendToChat.Show();
+                selectFriendToChat.Closed += (s, args) => this.Show();
+
             }
             else MessageBox.Show("Username or Password is incorrect!");
 

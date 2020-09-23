@@ -18,7 +18,6 @@ namespace ChitChat
     partial class Listener : ServiceBase
     {
         private UdpClient udpClient_ { get; set; }
-        //private TcpListener tcpListener_ { get; set; }
         private Task worker_ { get; set; }
         private CancellationTokenSource cts_ { get; set; }
         private IPEndPoint remoteEP { get; set; }

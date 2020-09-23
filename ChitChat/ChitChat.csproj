@@ -47,11 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dashboard.cs">
+    <Compile Include="Chatting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dashboard.Designer.cs">
-      <DependentUpon>Dashboard.cs</DependentUpon>
+    <Compile Include="Chatting.Designer.cs">
+      <DependentUpon>Chatting.cs</DependentUpon>
     </Compile>
     <Compile Include="Database.cs" />
     <Compile Include="Listener.cs">
@@ -75,6 +75,12 @@
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
     <Compile Include="Logs.cs" />
+    <Compile Include="SelectFriendToChat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectFriendToChat.Designer.cs">
+      <DependentUpon>SelectFriendToChat.cs</DependentUpon>
+    </Compile>
     <Compile Include="User.cs" />
     <Compile Include="Validate.cs" />
     <Compile Include="Welcome.cs">
@@ -85,8 +91,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Dashboard.resx">
-      <DependentUpon>Dashboard.cs</DependentUpon>
+    <EmbeddedResource Include="Chatting.resx">
+      <DependentUpon>Chatting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
@@ -102,6 +108,9 @@
     </Compile>
     <EmbeddedResource Include="Register.resx">
       <DependentUpon>Register.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectFriendToChat.resx">
+      <DependentUpon>SelectFriendToChat.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Welcome.resx">
       <DependentUpon>Welcome.cs</DependentUpon>

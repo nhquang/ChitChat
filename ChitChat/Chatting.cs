@@ -11,21 +11,46 @@ using System.Windows.Forms;
 
 namespace ChitChat
 {
-    public partial class Dashboard : Form
+    public partial class Chatting : Form
     {
-        Listener listener = null;
         Task updateContent = null;
         CancellationTokenSource cancellationTokenSource = null;
-        public Dashboard()
+        private User user { get; set; }
+
+
+        #region Ctors
+        public Chatting()
         {
             InitializeComponent();
         }
-        private void Dashboard_Load(object sender, EventArgs e)
+
+        public Chatting(User user)
+        {
+            InitializeComponent();
+            
+            this.user = user;
+            try
+            {
+                User.load_User(ref user);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logs logs = new Logs();
+                logs.writeException(ex);
+            }
+            
+
+            this.welcomeLbl.Text += " " + user.name_;
+        }
+        #endregion
+
+
+        private void Chatting_Load(object sender, EventArgs e)
         {
             try
             {
-                this.listener = new Listener();
-                listener.OnStartAccessor(new string[] { });
+                
                 cancellationTokenSource = new CancellationTokenSource();
                 updateContent = new Task(() => displayMessageProcess(cancellationTokenSource.Token), cancellationTokenSource.Token, TaskCreationOptions.LongRunning);
                 updateContent.Start();
@@ -35,6 +60,7 @@ namespace ChitChat
                 MessageBox.Show(ex.Message);
                 Logs logs = new Logs();
                 logs.writeException(ex);
+                this.Close();
             }
         }
 
@@ -68,7 +94,6 @@ namespace ChitChat
                 cancellationTokenSource.Cancel();
                 updateContent.Wait();
                 updateContent.Dispose();
-                listener?.OnStopAccessor();
                 base.OnClosed(e);
             }
             catch(Exception ex)
@@ -78,5 +103,7 @@ namespace ChitChat
                 logs.writeException(ex);
             }
         }
+
+        
     }
 }
