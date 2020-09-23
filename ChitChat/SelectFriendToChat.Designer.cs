@@ -29,8 +29,10 @@
         private void InitializeComponent()
         {
             this.welcomeLbl = new System.Windows.Forms.Label();
-            this.friends = new System.Windows.Forms.ListBox();
+            this.contacts = new System.Windows.Forms.ListBox();
             this.chatBtn = new System.Windows.Forms.Button();
+            this.notification = new System.Windows.Forms.Label();
+            this.addCtBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // welcomeLbl
@@ -43,13 +45,15 @@
             this.welcomeLbl.Text = "Hi ";
             this.welcomeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // friends
+            // contacts
             // 
-            this.friends.FormattingEnabled = true;
-            this.friends.Location = new System.Drawing.Point(12, 93);
-            this.friends.Name = "friends";
-            this.friends.Size = new System.Drawing.Size(304, 186);
-            this.friends.TabIndex = 4;
+            this.contacts.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.contacts.FormattingEnabled = true;
+            this.contacts.ItemHeight = 20;
+            this.contacts.Location = new System.Drawing.Point(12, 93);
+            this.contacts.Name = "contacts";
+            this.contacts.Size = new System.Drawing.Size(304, 184);
+            this.contacts.TabIndex = 4;
             // 
             // chatBtn
             // 
@@ -61,8 +65,31 @@
             this.chatBtn.Name = "chatBtn";
             this.chatBtn.Size = new System.Drawing.Size(97, 43);
             this.chatBtn.TabIndex = 8;
-            this.chatBtn.Text = "Send";
+            this.chatBtn.Text = "Chat";
             this.chatBtn.UseVisualStyleBackColor = false;
+            // 
+            // notification
+            // 
+            this.notification.BackColor = System.Drawing.Color.White;
+            this.notification.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.notification.Location = new System.Drawing.Point(357, 93);
+            this.notification.Name = "notification";
+            this.notification.Size = new System.Drawing.Size(189, 186);
+            this.notification.TabIndex = 9;
+            this.notification.Text = "Notification:";
+            // 
+            // addCtBtn
+            // 
+            this.addCtBtn.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.addCtBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.addCtBtn.BackColor = System.Drawing.Color.Orange;
+            this.addCtBtn.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addCtBtn.Location = new System.Drawing.Point(12, 292);
+            this.addCtBtn.Name = "addCtBtn";
+            this.addCtBtn.Size = new System.Drawing.Size(126, 43);
+            this.addCtBtn.TabIndex = 10;
+            this.addCtBtn.Text = "Add Contact";
+            this.addCtBtn.UseVisualStyleBackColor = false;
             // 
             // SelectFriendToChat
             // 
@@ -70,8 +97,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.AliceBlue;
             this.ClientSize = new System.Drawing.Size(558, 347);
+            this.Controls.Add(this.addCtBtn);
+            this.Controls.Add(this.notification);
             this.Controls.Add(this.chatBtn);
-            this.Controls.Add(this.friends);
+            this.Controls.Add(this.contacts);
             this.Controls.Add(this.welcomeLbl);
             this.Name = "SelectFriendToChat";
             this.Text = "SelectFriendToChat";
@@ -83,7 +112,9 @@
         #endregion
 
         private System.Windows.Forms.Label welcomeLbl;
-        private System.Windows.Forms.ListBox friends;
+        private System.Windows.Forms.ListBox contacts;
         private System.Windows.Forms.Button chatBtn;
+        private System.Windows.Forms.Label notification;
+        private System.Windows.Forms.Button addCtBtn;
     }
 }

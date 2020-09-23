@@ -47,6 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddContact.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddContact.Designer.cs">
+      <DependentUpon>AddContact.cs</DependentUpon>
+    </Compile>
     <Compile Include="Chatting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,6 +97,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AddContact.resx">
+      <DependentUpon>AddContact.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Chatting.resx">
       <DependentUpon>Chatting.cs</DependentUpon>
     </EmbeddedResource>
