@@ -66,7 +66,7 @@
     <Compile Include="Listener.Designer.cs">
       <DependentUpon>Listener.cs</DependentUpon>
     </Compile>
-    <Compile Include="Password.cs" />
+    <Compile Include="Utilities.cs" />
     <Compile Include="Register.cs">
       <SubType>Form</SubType>
     </Compile>

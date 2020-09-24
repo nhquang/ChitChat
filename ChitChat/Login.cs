@@ -34,10 +34,10 @@ namespace ChitChat
             reg.Closed += (s, args) => this.Show();
         }
 
-        private void signInBtn_Click(object sender, EventArgs e)
+        private async void signInBtn_Click(object sender, EventArgs e)
         {
-
-            if (Login.authentication(new Tuple<string, string>(usr.Text, pwd.Text)))
+            bool check = await Login.authenticationAsync(new Tuple<string, string>(usr.Text, pwd.Text));
+            if (check)
             {
                 SelectFriendToChat selectFriendToChat = new SelectFriendToChat(new User(usr.Text));
                 this.Hide();
@@ -48,7 +48,7 @@ namespace ChitChat
             else MessageBox.Show("Username or Password is incorrect!");
 
         }
-        private static bool authentication(Tuple<string,string> credentials)
+        private async static Task<bool> authenticationAsync(Tuple<string,string> credentials)
         {
             User user = new User(credentials.Item1);
             string temp = string.Empty;
@@ -56,8 +56,9 @@ namespace ChitChat
             {
                 using (var database = new Database())
                 {
-                    if (database.UserExists(user))
-                        if (Password.hashPassword(credentials.Item2).Equals(database.userPwd(user)))
+                    bool check = await database.UserExistsAsync(user);
+                    if (check)
+                        if (Utilities.hashPassword(credentials.Item2).Equals(database.userPwd(user)))
                             return true;
                 }
             }

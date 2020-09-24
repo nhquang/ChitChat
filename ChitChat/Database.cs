@@ -16,12 +16,12 @@ namespace ChitChat
 
         public Database()
         {
-            sql_ = new SqlConnection(ConfigurationSettings.AppSettings["connectionString"].Trim().Replace("{your_password}", Password.decryption(ConfigurationSettings.AppSettings["password"].Trim())));
+            sql_ = new SqlConnection(ConfigurationSettings.AppSettings["connectionString"].Trim().Replace("{your_password}", Utilities.decryption(ConfigurationSettings.AppSettings["password"].Trim())));
             if (sql_.State == System.Data.ConnectionState.Closed)
                 sql_.Open();
 
         }
-        public void addUser(User user)
+        public async Task addUserAsync(User user)
         {
             var data = new Dictionary<string, object>();
             data.Add("@name_", user.name_);
@@ -30,17 +30,18 @@ namespace ChitChat
             data.Add("@age_", user.age_);
             data.Add("@male_", user.male_);
             data.Add("@note_", user.note_);
+            data.Add("@IP_", user.ip_.ToString());
 
             this.constructStoredProcedure("AddUser", data);
-            sqlCommand_.ExecuteNonQuery();
+            await sqlCommand_.ExecuteNonQueryAsync();
         }
 
-        public bool UserExists(User user)
+        public async Task<bool> UserExistsAsync(User user)
         {
             var data = new Dictionary<string, object>();
             data.Add("@Username", user.username_);
             this.constructStoredProcedure("SelectUser", data);
-            var rslt = sqlCommand_.ExecuteReader();
+            var rslt = await sqlCommand_.ExecuteReaderAsync();
             bool hasRows = rslt.HasRows;
             rslt.Close();
             return hasRows;
@@ -66,10 +67,31 @@ namespace ChitChat
             this.constructStoredProcedure("SelectUser", data);
             var rslt = sqlCommand_.ExecuteReader();
             while (rslt.Read())
-            {
-                user = new User(rslt.GetString(1), rslt.GetString(2), null, null, (bool)rslt.GetValue(5), rslt.GetString(6));
-            }
+                user = new User(rslt.GetString(1), rslt.GetString(2), null, null, (bool)rslt.GetValue(5), rslt.GetString(6), rslt.IsDBNull(7) ? null : rslt.GetString(7));
             rslt.Close();
+        }
+
+        public string userIP(User user)
+        {
+            string ip = string.Empty;
+            var data = new Dictionary<string, object>();
+            data.Add("@username", user.username_);
+            this.constructStoredProcedure("SelectUser", data);
+            var rslt = sqlCommand_.ExecuteReader();
+            while (rslt.Read())
+                ip = rslt.GetString(7);
+            rslt.Close();
+            return ip;
+        }
+
+        public async Task updateIPAsync(User user)
+        {
+            var data = new Dictionary<string, object>();
+            data.Add("@Username", user.username_);
+            data.Add("@NewIP", user.ip_.ToString());
+            this.constructStoredProcedure("UpdateIP", data);
+            await sqlCommand_.ExecuteNonQueryAsync();
+
         }
 
         private void constructStoredProcedure(string proc, Dictionary<string,object> parameters)

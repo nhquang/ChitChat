@@ -32,6 +32,15 @@ namespace ChitChat
             try
             {
                 User.load_User(ref user);
+                if (user.ip_ == null || !Utilities.compareIPs(user.ip_.ToString()))
+                {
+                    user.updateUserIP(Utilities.GetLocalIPAddress());
+                    using (var database = new Database())
+                    {
+                        database.updateIPAsync(user);
+                    }
+                }
+                this.welcomeLbl.Text += " " + user.name_;
             }
             catch (Exception ex)
             {
@@ -39,7 +48,7 @@ namespace ChitChat
                 Logs logs = new Logs();
                 logs.writeException(ex);
             }
-            this.welcomeLbl.Text += " " + user.name_;
+            
         }
         #endregion
 
@@ -48,6 +57,7 @@ namespace ChitChat
         {
             this.listener_ = new Listener();
             listener_.OnStartAccessor(new string[] { });
+            cts_ = new CancellationTokenSource();
             this.updateNoti_ = new Task(() => this.updateNotification_(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
         }
 

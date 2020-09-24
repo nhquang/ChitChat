@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,7 +15,8 @@ namespace ChitChat
         public int age_ { get; private set; }
         public bool male_ { get; private set; }
         public string note_ { get; private set; }
-        public User(string name, string username, string pass, int? age, bool? male, string note)
+        public IPAddress ip_ { get; private set; }
+        public User(string name, string username, string pass, int? age, bool? male, string note, string ip)
         {
             name_ = name;
             username_ = username;
@@ -23,6 +25,8 @@ namespace ChitChat
             else age_ = 0;
             if (male.HasValue) male_ = male.Value;
             note_ = note;
+            if (ip != null) ip_ = IPAddress.Parse(ip);
+            else ip_ = null;
         }
         public User(string username)
         {
@@ -41,6 +45,10 @@ namespace ChitChat
             {
                 throw;
             }
+        }
+        public void updateUserIP(string newIp)
+        {
+            this.ip_ = IPAddress.Parse(newIp);
         }
     }
 }

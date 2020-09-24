@@ -28,7 +28,7 @@ namespace ChitChat
             base.OnClosed(e);
         }
 
-        private void regBtn_Click(object sender, EventArgs e)
+        private async void regBtn_Click(object sender, EventArgs e)
         {
             bool pass = false;
             try
@@ -43,7 +43,8 @@ namespace ChitChat
                             using (var database = new Database())
                             {
                                 User user = new User(username.Text);
-                                if (!database.UserExists(user)) pass = true;
+                                bool check = await database.UserExistsAsync(user);
+                                if (!check) pass = true;
                                 else MessageBox.Show("Username already exists.");
                             }
                         }
@@ -54,15 +55,18 @@ namespace ChitChat
                 else MessageBox.Show("Name can contain letters only.");
                 #endregion
 
+
+
                 if (pass)
                 {
-                    User user = new User(name.Text, username.Text, Password.hashPassword(pwd.Text), null, male.Checked, notes.Text);
+
+                    User user = new User(name.Text, username.Text, Utilities.hashPassword(pwd.Text), null, male.Checked, notes.Text, Utilities.GetLocalIPAddress());
 
                     try
                     {
                         using (var database = new Database())
                         {
-                            database.addUser(user);
+                            await database.addUserAsync(user);
                         }
                         MessageBox.Show("You have successfully registered!");
                         this.Close();
@@ -83,10 +87,6 @@ namespace ChitChat
                 var logs = new Logs();
                 logs.writeException(ex);
             }
-
-
         }
-
-        
     }
 }
