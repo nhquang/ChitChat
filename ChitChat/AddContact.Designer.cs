@@ -28,19 +28,65 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.usrnames = new System.Windows.Forms.TextBox();
+            this.usrLbl = new System.Windows.Forms.Label();
+            this.addBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
+            // 
+            // usrnames
+            // 
+            this.usrnames.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.usrnames.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.usrnames.Location = new System.Drawing.Point(146, 70);
+            this.usrnames.Name = "usrnames";
+            this.usrnames.Size = new System.Drawing.Size(182, 20);
+            this.usrnames.TabIndex = 1;
+            // 
+            // usrLbl
+            // 
+            this.usrLbl.BackColor = System.Drawing.Color.AliceBlue;
+            this.usrLbl.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.usrLbl.Location = new System.Drawing.Point(24, 66);
+            this.usrLbl.Name = "usrLbl";
+            this.usrLbl.Size = new System.Drawing.Size(100, 23);
+            this.usrLbl.TabIndex = 8;
+            this.usrLbl.Text = "Username:";
+            this.usrLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // addBtn
+            // 
+            this.addBtn.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.addBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.addBtn.BackColor = System.Drawing.Color.Orange;
+            this.addBtn.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addBtn.Location = new System.Drawing.Point(27, 129);
+            this.addBtn.Name = "addBtn";
+            this.addBtn.Size = new System.Drawing.Size(97, 39);
+            this.addBtn.TabIndex = 2;
+            this.addBtn.Text = "Add";
+            this.addBtn.UseVisualStyleBackColor = false;
+            this.addBtn.Click += new System.EventHandler(this.addBtn_Click);
             // 
             // AddContact
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(451, 237);
+            this.BackColor = System.Drawing.Color.AliceBlue;
+            this.ClientSize = new System.Drawing.Size(365, 180);
+            this.Controls.Add(this.addBtn);
+            this.Controls.Add(this.usrLbl);
+            this.Controls.Add(this.usrnames);
             this.Name = "AddContact";
             this.Text = "AddContact";
+            this.Load += new System.EventHandler(this.AddContact_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
+        private System.Windows.Forms.TextBox usrnames;
+        private System.Windows.Forms.Label usrLbl;
+        private System.Windows.Forms.Button addBtn;
     }
 }

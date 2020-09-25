@@ -73,7 +73,14 @@ namespace ChitChat
         protected override void OnClosed(EventArgs e)
         {
             listener_?.OnStopAccessor();
+            this.Dispose();
             base.OnClosed(e);
+        }
+
+        private void addCtBtn_Click(object sender, EventArgs e)
+        {
+            var addCon = new AddContact(this.user_);
+            addCon.Show();
         }
     }
 }

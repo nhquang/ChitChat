@@ -90,6 +90,7 @@
             this.addCtBtn.TabIndex = 10;
             this.addCtBtn.Text = "Add Contact";
             this.addCtBtn.UseVisualStyleBackColor = false;
+            this.addCtBtn.Click += new System.EventHandler(this.addCtBtn_Click);
             // 
             // SelectFriendToChat
             // 

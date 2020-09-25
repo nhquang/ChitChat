@@ -84,6 +84,18 @@ namespace ChitChat
             return ip;
         }
 
+        public async Task<List<User>> selectAllUsersAsync()
+        {
+            var data = new Dictionary<string, object>();
+            var users = new List<User>();
+            this.constructStoredProcedure("SelectAllUsers", data);
+            var rslt = await sqlCommand_.ExecuteReaderAsync();
+            while (rslt.Read())
+                users.Add(new User(rslt.GetString(1), rslt.GetString(2), null, null, (bool)rslt.GetValue(5), rslt.GetString(6), rslt.IsDBNull(7) ? null : rslt.GetString(7)));
+            rslt.Close();
+            return users;
+        }
+
         public async Task updateIPAsync(User user)
         {
             var data = new Dictionary<string, object>();
