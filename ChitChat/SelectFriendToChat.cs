@@ -55,10 +55,19 @@ namespace ChitChat
 
         private void SelectFriendToChat_Load(object sender, EventArgs e)
         {
-            this.listener_ = new Listener();
-            listener_.OnStartAccessor(new string[] { });
-            cts_ = new CancellationTokenSource();
-            this.updateNoti_ = new Task(() => this.updateNotification_(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
+            try
+            {
+                this.listener_ = new Listener();
+                listener_.OnStartAccessor(new string[] { });
+                cts_ = new CancellationTokenSource();
+                this.updateNoti_ = new Task(() => this.updateNotification_(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logs logs = new Logs();
+                logs.writeException(ex);
+            }
         }
 
         private void updateNotification_(CancellationToken token)
@@ -79,7 +88,7 @@ namespace ChitChat
 
         private void addCtBtn_Click(object sender, EventArgs e)
         {
-            var addCon = new AddContact(this.user_);
+            var addCon = new AddContact(user_);
             addCon.Show();
         }
     }

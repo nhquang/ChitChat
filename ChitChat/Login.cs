@@ -39,7 +39,8 @@ namespace ChitChat
             bool check = await Login.authenticationAsync(new Tuple<string, string>(usr.Text, pwd.Text));
             if (check)
             {
-                SelectFriendToChat selectFriendToChat = new SelectFriendToChat(new User(usr.Text));
+                var user = new User(usr.Text);
+                SelectFriendToChat selectFriendToChat = new SelectFriendToChat(user);
                 this.Hide();
                 selectFriendToChat.Show();
                 selectFriendToChat.Closed += (s, args) => this.Show();

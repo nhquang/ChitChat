@@ -49,6 +49,7 @@ namespace ChitChat
 
         private void addBtn_Click(object sender, EventArgs e)
         {
+            user_.contacts_.Add(new User(usrnames.Text));
 
         }
 

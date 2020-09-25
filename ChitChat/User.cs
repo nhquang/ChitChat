@@ -16,6 +16,8 @@ namespace ChitChat
         public bool male_ { get; private set; }
         public string note_ { get; private set; }
         public IPAddress ip_ { get; private set; }
+        public List<User> contacts_ { get; private set; }
+
         public User(string name, string username, string pass, int? age, bool? male, string note, string ip)
         {
             name_ = name;
