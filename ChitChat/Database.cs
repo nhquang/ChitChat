@@ -67,7 +67,7 @@ namespace ChitChat
             this.constructStoredProcedure("SelectUser", data);
             var rslt = sqlCommand_.ExecuteReader();
             while (rslt.Read())
-                user = new User(rslt.GetString(1), rslt.GetString(2), null, null, (bool)rslt.GetValue(5), rslt.GetString(6), rslt.IsDBNull(7) ? null : rslt.GetString(7));
+                user = new User((int)rslt.GetValue(0),rslt.GetString(1), rslt.GetString(2), null, null, (bool)rslt.GetValue(5), rslt.GetString(6), rslt.IsDBNull(7) ? null : rslt.GetString(7));
             rslt.Close();
         }
 
@@ -91,7 +91,7 @@ namespace ChitChat
             this.constructStoredProcedure("SelectAllUsers", data);
             var rslt = await sqlCommand_.ExecuteReaderAsync();
             while (rslt.Read())
-                users.Add(new User(rslt.GetString(1), rslt.GetString(2), null, null, (bool)rslt.GetValue(5), rslt.GetString(6), rslt.IsDBNull(7) ? null : rslt.GetString(7)));
+                users.Add(new User((int)rslt.GetValue(0), rslt.GetString(1), rslt.GetString(2), null, null, (bool)rslt.GetValue(5), rslt.GetString(6), rslt.IsDBNull(7) ? null : rslt.GetString(7)));
             rslt.Close();
             return users;
         }
@@ -104,6 +104,29 @@ namespace ChitChat
             this.constructStoredProcedure("UpdateIP", data);
             await sqlCommand_.ExecuteNonQueryAsync();
 
+        }
+
+        public async Task<Dictionary<int,int>> selectContacts(User user)
+        {
+            var contacts = new Dictionary<int, int>();
+            var data = new Dictionary<string, object>();
+            data.Add("@ID", user.id_);
+            this.constructStoredProcedure("SelectContacts", data);
+            var rslt = await sqlCommand_.ExecuteReaderAsync();
+            while (rslt.Read())
+                contacts.Add((int)rslt.GetValue(0), (int)rslt.GetValue(1));
+            rslt.Close();
+            return contacts;
+
+        }
+        public async Task addContact(User user1, User user2)
+        {
+            var data = new Dictionary<string, object>();
+            data.Add("@ID1", user1.id_);
+            data.Add("@ID2", user2.id_);
+            this.constructStoredProcedure("AddContact", data);
+            await sqlCommand_.ExecuteNonQueryAsync();
+                        
         }
 
         private void constructStoredProcedure(string proc, Dictionary<string,object> parameters)

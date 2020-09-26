@@ -9,6 +9,7 @@ namespace ChitChat
 {
     public class User
     {
+        public int id_ { get; private set; }
         public string name_ { get; private set; }
         public string username_ { get; private set; }
         public string pass_ { get; private set; }
@@ -18,6 +19,19 @@ namespace ChitChat
         public IPAddress ip_ { get; private set; }
         public List<User> contacts_ { get; private set; }
 
+        public User(int id, string name, string username, string pass, int? age, bool? male, string note, string ip)
+        {
+            id_ = id;
+            name_ = name;
+            username_ = username;
+            pass_ = pass;
+            if (age.HasValue) age_ = age.Value;
+            else age_ = 0;
+            if (male.HasValue) male_ = male.Value;
+            note_ = note;
+            if (ip != null) ip_ = IPAddress.Parse(ip);
+            else ip_ = null;
+        }
         public User(string name, string username, string pass, int? age, bool? male, string note, string ip)
         {
             name_ = name;
