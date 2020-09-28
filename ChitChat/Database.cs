@@ -60,15 +60,16 @@ namespace ChitChat
             return pwd;
         }
 
-        public void selectUser(ref User user)
+        public async Task<User> selectUserAsync(User user)
         {
             var data = new Dictionary<string, object>();
             data.Add("@username", user.username_);
             this.constructStoredProcedure("SelectUser", data);
-            var rslt = sqlCommand_.ExecuteReader();
+            var rslt = await sqlCommand_.ExecuteReaderAsync();
             while (rslt.Read())
                 user = new User((int)rslt.GetValue(0),rslt.GetString(1), rslt.GetString(2), null, null, (bool)rslt.GetValue(5), rslt.GetString(6), rslt.IsDBNull(7) ? null : rslt.GetString(7));
             rslt.Close();
+            return user;
         }
 
         public string userIP(User user)

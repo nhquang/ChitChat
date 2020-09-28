@@ -17,7 +17,7 @@ namespace ChitChat
         public bool male_ { get; private set; }
         public string note_ { get; private set; }
         public IPAddress ip_ { get; private set; }
-        public List<User> contacts_ { get; private set; }
+        public List<int> contactIDs_ { get; private set; }
 
         public User(int id, string name, string username, string pass, int? age, bool? male, string note, string ip)
         {
@@ -31,6 +31,7 @@ namespace ChitChat
             note_ = note;
             if (ip != null) ip_ = IPAddress.Parse(ip);
             else ip_ = null;
+            contactIDs_ = new List<int>();
         }
         public User(string name, string username, string pass, int? age, bool? male, string note, string ip)
         {
@@ -48,14 +49,15 @@ namespace ChitChat
         {
             username_ = username;
         }
-        public static void load_User(ref User user)
+        public static async Task<User> load_UserAsync(User user)
         {
             try
             {
                 using (var database = new Database())
                 {
-                    database.selectUser(ref user);
+                    user = await database.selectUserAsync(user);
                 }
+                return user;
             }
             catch(Exception ex)
             {
@@ -70,6 +72,10 @@ namespace ChitChat
             {
                 await database.updateIPAsync(this.username_, newIp);
             }
+        }
+        async Task load_Contacts()
+        {
+            //var contacts = await
         }
     }
 }

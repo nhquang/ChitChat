@@ -15,7 +15,7 @@ namespace ChitChat
     {
         Task updateContent = null;
         CancellationTokenSource cancellationTokenSource = null;
-        private User user { get; set; }
+        private User user_ { get; set; }
 
 
         #region Ctors
@@ -28,17 +28,8 @@ namespace ChitChat
         {
             InitializeComponent();
             
-            this.user = user;
-            try
-            {
-                User.load_User(ref user);
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                Logs logs = new Logs();
-                logs.writeException(ex);
-            }
+            this.user_ = user;
+            
             
 
             this.welcomeLbl.Text += " " + user.name_;
@@ -46,11 +37,13 @@ namespace ChitChat
         #endregion
 
 
-        private void Chatting_Load(object sender, EventArgs e)
+        private async void Chatting_Load(object sender, EventArgs e)
         {
             try
             {
-                
+                user_ = await User.load_UserAsync(user_);
+                this.welcomeLbl.Text += " " + user_.name_;
+
                 cancellationTokenSource = new CancellationTokenSource();
                 updateContent = new Task(() => displayMessageProcess(cancellationTokenSource.Token), cancellationTokenSource.Token, TaskCreationOptions.LongRunning);
                 updateContent.Start();

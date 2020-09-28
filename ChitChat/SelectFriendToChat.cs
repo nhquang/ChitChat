@@ -29,28 +29,23 @@ namespace ChitChat
         {
             InitializeComponent();
             this.user_ = user;
-            try
-            {
-                User.load_User(ref user);
-                if (user_.ip_ == null || !Utilities.compareIPs(user_.ip_.ToString()))
-                    user_.updateUserIPAsync(Utilities.GetLocalIPAddress());
-                this.welcomeLbl.Text += " " + user.name_;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                Logs logs = new Logs();
-                logs.writeException(ex);
-            }
             
         }
         #endregion
 
 
-        private void SelectFriendToChat_Load(object sender, EventArgs e)
+        private async void SelectFriendToChat_Load(object sender, EventArgs e)
         {
             try
             {
+                user_ = await User.load_UserAsync(user_);
+                this.welcomeLbl.Text += " " + user_.name_;
+
+                if (user_.ip_ == null || !Utilities.compareIPs(user_.ip_.ToString()))
+                    user_.updateUserIPAsync(Utilities.GetLocalIPAddress());
+
+                
+
                 this.listener_ = new Listener();
                 listener_.OnStartAccessor(new string[] { });
                 cts_ = new CancellationTokenSource();
@@ -75,7 +70,11 @@ namespace ChitChat
 
         protected override void OnClosed(EventArgs e)
         {
+            //this.updateNoti_.Wait();
+            cts_.Cancel();          
+            this.updateNoti_.Dispose();
             listener_?.OnStopAccessor();
+            
             this.Dispose();
             base.OnClosed(e);
         }
