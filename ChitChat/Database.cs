@@ -96,17 +96,17 @@ namespace ChitChat
             return users;
         }
 
-        public async Task updateIPAsync(User user)
+        public async Task updateIPAsync(string username, string ip)
         {
             var data = new Dictionary<string, object>();
-            data.Add("@Username", user.username_);
-            data.Add("@NewIP", user.ip_.ToString());
+            data.Add("@Username", username);
+            data.Add("@NewIP", ip);
             this.constructStoredProcedure("UpdateIP", data);
             await sqlCommand_.ExecuteNonQueryAsync();
 
         }
 
-        public async Task<Dictionary<int,int>> selectContacts(User user)
+        public async Task<Dictionary<int,int>> selectContactsAsync(User user)
         {
             var contacts = new Dictionary<int, int>();
             var data = new Dictionary<string, object>();
@@ -119,7 +119,7 @@ namespace ChitChat
             return contacts;
 
         }
-        public async Task addContact(User user1, User user2)
+        public async Task addContactAsync(User user1, User user2)
         {
             var data = new Dictionary<string, object>();
             data.Add("@ID1", user1.id_);

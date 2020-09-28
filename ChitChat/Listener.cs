@@ -20,7 +20,7 @@ namespace ChitChat
         private UdpClient udpClient_ { get; set; }
         private Task worker_ { get; set; }
         private CancellationTokenSource cts_ { get; set; }
-        private IPEndPoint remoteEP { get; set; }
+        //private IPEndPoint remoteEP { get; set; }
 
         public static BlockingCollection<string> messages = new BlockingCollection<string>();
 
@@ -77,24 +77,29 @@ namespace ChitChat
 
         private async void listening(CancellationToken ct)
         {
-            
             try
             {
-                while (true)
+                while (!ct.IsCancellationRequested)
                 {
-                    ct.ThrowIfCancellationRequested();
-                    var received = await udpClient_.ReceiveAsync();
-                    messages.Add(Encoding.ASCII.GetString(received.Buffer));
+                    try
+                    {
+                        var received = await udpClient_.ReceiveAsync();
+                        messages.TryAdd(Encoding.ASCII.GetString(received.Buffer));
+                    }
+                    catch (ObjectDisposedException ex)
+                    {
+                        throw;
+                    }
+                    catch (Exception ex)
+                    {
+                        Logs logs = new Logs();
+                        logs.writeException(ex);
+                    }
                 }
-            }           
+            }
             catch(ObjectDisposedException ex)
             {
 
-            }
-            catch (Exception ex)
-            {
-                Logs logs = new Logs();
-                logs.writeException(ex);
             }
         }
     }

@@ -32,14 +32,8 @@ namespace ChitChat
             try
             {
                 User.load_User(ref user);
-                if (user.ip_ == null || !Utilities.compareIPs(user.ip_.ToString()))
-                {
-                    user.updateUserIP(Utilities.GetLocalIPAddress());
-                    using (var database = new Database())
-                    {
-                        database.updateIPAsync(user);
-                    }
-                }
+                if (user_.ip_ == null || !Utilities.compareIPs(user_.ip_.ToString()))
+                    user_.updateUserIPAsync(Utilities.GetLocalIPAddress());
                 this.welcomeLbl.Text += " " + user.name_;
             }
             catch (Exception ex)

@@ -47,12 +47,13 @@
             // 
             // contacts
             // 
+            this.contacts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.contacts.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.contacts.FormattingEnabled = true;
             this.contacts.ItemHeight = 20;
             this.contacts.Location = new System.Drawing.Point(12, 93);
             this.contacts.Name = "contacts";
-            this.contacts.Size = new System.Drawing.Size(304, 184);
+            this.contacts.Size = new System.Drawing.Size(304, 182);
             this.contacts.TabIndex = 4;
             // 
             // chatBtn
@@ -71,10 +72,11 @@
             // notification
             // 
             this.notification.BackColor = System.Drawing.Color.White;
+            this.notification.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.notification.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.notification.Location = new System.Drawing.Point(357, 93);
             this.notification.Name = "notification";
-            this.notification.Size = new System.Drawing.Size(189, 186);
+            this.notification.Size = new System.Drawing.Size(189, 182);
             this.notification.TabIndex = 9;
             this.notification.Text = "Notification:";
             // 

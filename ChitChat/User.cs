@@ -62,9 +62,14 @@ namespace ChitChat
                 throw;
             }
         }
-        public void updateUserIP(string newIp)
+        public async Task updateUserIPAsync(string newIp)
         {
+
             this.ip_ = IPAddress.Parse(newIp);
+            using (var database = new Database())
+            {
+                await database.updateIPAsync(this.username_, newIp);
+            }
         }
     }
 }

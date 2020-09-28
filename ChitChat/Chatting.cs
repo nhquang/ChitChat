@@ -67,18 +67,18 @@ namespace ChitChat
 
         void displayMessageProcess(CancellationToken token)
         {
-            try
+            while (!token.IsCancellationRequested)
             {
-                while (!token.IsCancellationRequested)
+                try
                 {
-                    if (Listener.messages.TryTake(out string temp))
-                        content.BeginInvoke((Action)(() => updateMessageBox(temp)));
+                    if(Listener.messages.TryTake(out string temp))
+                        content.BeginInvoke((Action)(() => this.updateMessageBox(temp)));
                 }
-            }
-            catch(Exception ex)
-            {
-                Logs logs = new Logs();
-                logs.writeException(ex);
+                catch(Exception ex)
+                {
+                    Logs logs = new Logs();
+                    logs.writeException(ex);
+                }
             }
         }
         
