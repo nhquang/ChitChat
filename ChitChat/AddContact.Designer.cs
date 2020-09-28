@@ -28,19 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.usrnames = new System.Windows.Forms.TextBox();
+            this.usrname = new System.Windows.Forms.TextBox();
             this.usrLbl = new System.Windows.Forms.Label();
             this.addBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // usrnames
+            // usrname
             // 
-            this.usrnames.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.usrnames.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.usrnames.Location = new System.Drawing.Point(146, 70);
-            this.usrnames.Name = "usrnames";
-            this.usrnames.Size = new System.Drawing.Size(182, 20);
-            this.usrnames.TabIndex = 1;
+            this.usrname.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.usrname.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.usrname.Location = new System.Drawing.Point(146, 70);
+            this.usrname.Name = "usrname";
+            this.usrname.Size = new System.Drawing.Size(182, 20);
+            this.usrname.TabIndex = 1;
             // 
             // usrLbl
             // 
@@ -75,7 +75,7 @@
             this.ClientSize = new System.Drawing.Size(365, 180);
             this.Controls.Add(this.addBtn);
             this.Controls.Add(this.usrLbl);
-            this.Controls.Add(this.usrnames);
+            this.Controls.Add(this.usrname);
             this.Name = "AddContact";
             this.Text = "AddContact";
             this.Load += new System.EventHandler(this.AddContact_Load);
@@ -85,7 +85,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.TextBox usrnames;
+        private System.Windows.Forms.TextBox usrname;
         private System.Windows.Forms.Label usrLbl;
         private System.Windows.Forms.Button addBtn;
     }

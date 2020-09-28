@@ -13,7 +13,7 @@ namespace ChitChat
     public partial class AddContact : Form
     {
         private User user_ { get; set; }
-        private List<User> users_ { get; set; }
+        private List<User> allUsers_ { get; set; }
 
 
         #region Ctors
@@ -35,9 +35,9 @@ namespace ChitChat
             {
                 using (var database = new Database())
                 {
-                    users_ = await database.selectAllUsersAsync();
+                    allUsers_ = await database.selectAllUsersAsync();
                 }
-                this.usrnames.AutoCompleteCustomSource.AddRange(users_.Select(u => u.username_).Where(u => u.Equals(user_.username_) ==  false).ToArray());
+                this.usrname.AutoCompleteCustomSource.AddRange(allUsers_.Select(u => u.username_).Where(u => u.Equals(user_.username_) ==  false).ToArray());
             }
             catch(Exception ex)
             {
@@ -47,10 +47,28 @@ namespace ChitChat
             }
         }
 
-        private void addBtn_Click(object sender, EventArgs e)
+        private async void addBtn_Click(object sender, EventArgs e)
         {
-            
-
+            try
+            {
+                if (allUsers_.Select(u => u.username_).Contains(usrname.Text))
+                {
+                    var temp = await User.load_UserAsync(new User(usrname.Text));
+                    if (!user_.contactIDs_.Contains(temp.id_))
+                    {
+                        //user_.contactIDs_.Add(temp.id_);
+                        using (var database = new Database())
+                        {
+                            database.addContactAsync(user_, temp);
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Logs logs = new Logs();
+                logs.writeException(ex);
+            }
         }
 
         protected override void OnClosed(EventArgs e)
