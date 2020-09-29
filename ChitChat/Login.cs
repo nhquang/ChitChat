@@ -40,7 +40,7 @@ namespace ChitChat
             if (check)
             {
                 var user = new User(usr.Text);
-                SelectFriendToChat selectFriendToChat = new SelectFriendToChat(user);
+                UserMain selectFriendToChat = new UserMain(user);
                 this.Hide();
                 selectFriendToChat.Show();
                 selectFriendToChat.Closed += (s, args) => this.Show();

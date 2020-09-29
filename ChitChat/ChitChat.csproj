@@ -82,11 +82,11 @@
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
     <Compile Include="Logs.cs" />
-    <Compile Include="SelectFriendToChat.cs">
+    <Compile Include="UserMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SelectFriendToChat.Designer.cs">
-      <DependentUpon>SelectFriendToChat.cs</DependentUpon>
+    <Compile Include="UserMain.Designer.cs">
+      <DependentUpon>UserMain.cs</DependentUpon>
     </Compile>
     <Compile Include="User.cs" />
     <Compile Include="Validate.cs" />
@@ -119,8 +119,8 @@
     <EmbeddedResource Include="Register.resx">
       <DependentUpon>Register.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SelectFriendToChat.resx">
-      <DependentUpon>SelectFriendToChat.cs</DependentUpon>
+    <EmbeddedResource Include="UserMain.resx">
+      <DependentUpon>UserMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Welcome.resx">
       <DependentUpon>Welcome.cs</DependentUpon>

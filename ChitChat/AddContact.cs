@@ -12,7 +12,6 @@ namespace ChitChat
 {
     public partial class AddContact : Form
     {
-        private User user_ { get; set; }
         private List<User> allUsers_ { get; set; }
 
 
@@ -20,11 +19,6 @@ namespace ChitChat
         public AddContact()
         {
             InitializeComponent();
-        }
-        public AddContact(User user)
-        {
-            InitializeComponent();
-            user_ = user;
         }
         #endregion
 
@@ -37,7 +31,7 @@ namespace ChitChat
                 {
                     allUsers_ = await database.selectAllUsersAsync();
                 }
-                this.usrname.AutoCompleteCustomSource.AddRange(allUsers_.Select(u => u.username_).Where(u => u.Equals(user_.username_) ==  false).ToArray());
+                this.usrname.AutoCompleteCustomSource.AddRange(allUsers_.Select(u => u.username_).Where(u => u.Equals(UserMain.user_.username_) ==  false).ToArray());
             }
             catch(Exception ex)
             {
@@ -54,20 +48,26 @@ namespace ChitChat
                 if (allUsers_.Select(u => u.username_).Contains(usrname.Text))
                 {
                     var temp = await User.load_UserAsync(new User(usrname.Text));
-                    if (!user_.contactIDs_.Contains(temp.id_))
+                    if (!UserMain.user_.contactIDs_.Contains(temp.id_))
                     {
-                        //user_.contactIDs_.Add(temp.id_);
+
                         using (var database = new Database())
                         {
-                            database.addContactAsync(user_, temp);
+                            await database.addContactAsync(UserMain.user_, temp);
                         }
+                        UserMain.user_.contactIDs_.Add(temp.id_);
+
+                        MessageBox.Show("New contact has been added!");
                     }
+                    else MessageBox.Show("This user is already in your contact list");
                 }
+                else MessageBox.Show("Username doesn't exist in the database");
             }
             catch(Exception ex)
             {
                 Logs logs = new Logs();
                 logs.writeException(ex);
+                MessageBox.Show(ex.Message);
             }
         }
 
