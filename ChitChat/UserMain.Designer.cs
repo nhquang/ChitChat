@@ -1,6 +1,6 @@
 ﻿namespace ChitChat
 {
-    partial class SelectFriendToChat
+    partial class UserMain
     {
         /// <summary>
         /// Required designer variable.
@@ -94,7 +94,7 @@
             this.addCtBtn.UseVisualStyleBackColor = false;
             this.addCtBtn.Click += new System.EventHandler(this.addCtBtn_Click);
             // 
-            // SelectFriendToChat
+            // UserMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -105,9 +105,9 @@
             this.Controls.Add(this.chatBtn);
             this.Controls.Add(this.contacts);
             this.Controls.Add(this.welcomeLbl);
-            this.Name = "SelectFriendToChat";
-            this.Text = "SelectFriendToChat";
-            this.Load += new System.EventHandler(this.SelectFriendToChat_Load);
+            this.Name = "User Main";
+            this.Text = "User Main";
+            this.Load += new System.EventHandler(this.UserMain_Load);
             this.ResumeLayout(false);
 
         }
