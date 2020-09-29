@@ -60,7 +60,7 @@ namespace ChitChat
             return pwd;
         }
 
-        public async Task<User> selectUserAsync(User user)
+        public async Task<User> selectUserByUsernameAsync(User user)
         {
             var data = new Dictionary<string, object>();
             data.Add("@username", user.username_);
@@ -68,6 +68,19 @@ namespace ChitChat
             var rslt = await sqlCommand_.ExecuteReaderAsync();
             while (rslt.Read())
                 user = new User((int)rslt.GetValue(0),rslt.GetString(1), rslt.GetString(2), null, null, (bool)rslt.GetValue(5), rslt.GetString(6), rslt.IsDBNull(7) ? null : rslt.GetString(7));
+            rslt.Close();
+            return user;
+        }
+
+        public async Task<User> selectUserByIDAsync(int id)
+        {
+            User user = null;
+            var data = new Dictionary<string, object>();
+            data.Add("@ID", id);
+            this.constructStoredProcedure("SelectUserByID", data);
+            var rslt = await sqlCommand_.ExecuteReaderAsync();
+            while (rslt.Read())
+                user = new User(rslt.GetString(2));
             rslt.Close();
             return user;
         }

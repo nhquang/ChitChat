@@ -17,9 +17,12 @@ namespace ChitChat
 
         private Listener listener_ { get; set; }
 
+        private List<string> contactsUsernames { get; set; }
+
         Task updateNoti_ = null;
 
         public CancellationTokenSource cts_ { get; set; }
+
         #region ctors
         public UserMain()
         {
@@ -30,6 +33,7 @@ namespace ChitChat
             InitializeComponent();
 
             UserMain.user_ = user;
+            contactsUsernames = new List<string>();
         }
         #endregion
 
@@ -41,10 +45,15 @@ namespace ChitChat
                 UserMain.user_ = await User.load_UserAsync(user_);
                 this.welcomeLbl.Text += " " + user_.name_;
 
+                
+
                 if (UserMain.user_.ip_ == null || !Utilities.compareIPs(UserMain.user_.ip_.ToString()))
                     UserMain.user_.updateUserIPAsync(Utilities.GetLocalIPAddress());
 
-                this.contacts.DataSource = UserMain.user_.contactIDs_;
+
+                await Task.Run(() => this.load_ContactList());
+
+                this.contacts.DataSource = contactsUsernames;
 
                 this.listener_ = new Listener();
                 listener_.OnStartAccessor(new string[] { });
@@ -67,6 +76,19 @@ namespace ChitChat
                 //this.contacts.BeginInvoke((Action)(() => this.updateContactList()));
                 
 
+            }
+        }
+
+        private async void load_ContactList()
+        {
+            User user = null;
+            using (var database = new Database())
+            {
+                foreach (var item in UserMain.user_.contactIDs_)
+                {
+                    user = await database.selectUserByIDAsync(item);
+                    this.contactsUsernames.Add(user.username_);
+                }
             }
         }
 

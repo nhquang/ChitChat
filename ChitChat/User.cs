@@ -56,7 +56,7 @@ namespace ChitChat
             {
                 using (var database = new Database())
                 {
-                    user = await database.selectUserAsync(user);
+                    user = await database.selectUserByUsernameAsync(user);
                     user.contactIDs_ = await database.selectContactsAsync(user.id_);
                 }
                 return user;
