@@ -103,7 +103,7 @@ namespace ChitChat
             data.Add("@Username", username);
             data.Add("@NewIP", ip);
             this.constructStoredProcedure("UpdateIP", data);
-            await sqlCommand_.ExecuteNonQueryAsync();
+            sqlCommand_.ExecuteNonQueryAsync();
 
         }
 

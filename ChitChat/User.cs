@@ -72,7 +72,7 @@ namespace ChitChat
             this.ip_ = IPAddress.Parse(newIp);
             using (var database = new Database())
             {
-                await database.updateIPAsync(this.username_, newIp);
+                database.updateIPAsync(this.username_, newIp);
             }
         }
         

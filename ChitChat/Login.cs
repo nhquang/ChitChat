@@ -36,18 +36,24 @@ namespace ChitChat
 
         private async void signInBtn_Click(object sender, EventArgs e)
         {
-            bool check = await Login.authenticationAsync(new Tuple<string, string>(usr.Text, pwd.Text));
-            if (check)
+            try
             {
-                var user = new User(usr.Text);
-                UserMain selectFriendToChat = new UserMain(user);
-                this.Hide();
-                selectFriendToChat.Show();
-                selectFriendToChat.Closed += (s, args) => this.Show();
+                bool check = await Login.authenticationAsync(new Tuple<string, string>(usr.Text, pwd.Text));
+                if (check)
+                {
+                    var user = new User(usr.Text);
+                    UserMain selectFriendToChat = new UserMain(user);
+                    this.Hide();
+                    selectFriendToChat.Show();
+                    selectFriendToChat.Closed += (s, args) => this.Show();
+
+                }
+                else MessageBox.Show("Username or Password is incorrect!");
+            }
+            catch(Exception ex)
+            {
 
             }
-            else MessageBox.Show("Username or Password is incorrect!");
-
         }
         private async static Task<bool> authenticationAsync(Tuple<string,string> credentials)
         {
@@ -68,6 +74,7 @@ namespace ChitChat
                 Logs logs = new Logs();
                 logs.writeException(ex);
                 MessageBox.Show(ex.Message);
+                throw;
             }
             return false;
         }

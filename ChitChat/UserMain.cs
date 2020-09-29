@@ -17,7 +17,7 @@ namespace ChitChat
 
         private Listener listener_ { get; set; }
 
-        Task updateNotiAndContact_ = null;
+        Task updateNoti_ = null;
 
         public CancellationTokenSource cts_ { get; set; }
         #region ctors
@@ -49,8 +49,8 @@ namespace ChitChat
                 this.listener_ = new Listener();
                 listener_.OnStartAccessor(new string[] { });
                 cts_ = new CancellationTokenSource();
-                this.updateNotiAndContact_ = new Task(() => this.updateNotificationAndContactList_(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
-                this.updateNotiAndContact_.Start();
+                this.updateNoti_ = new Task(() => this.updateNotification_(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
+                this.updateNoti_.Start();
             }
             catch(Exception ex)
             {
@@ -60,25 +60,22 @@ namespace ChitChat
             }
         }
 
-        private void updateNotificationAndContactList_(CancellationToken token)
+        private void updateNotification_(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {
                 //this.contacts.BeginInvoke((Action)(() => this.updateContactList()));
+                
 
             }
-        }
-        private void updateContactList()
-        {
-            this.contacts.DataSource = UserMain.user_.contactIDs_;
         }
 
         protected override void OnClosed(EventArgs e)
         {
             
             cts_.Cancel();
-            this.updateNotiAndContact_.Wait();
-            this.updateNotiAndContact_.Dispose();
+            this.updateNoti_.Wait();
+            this.updateNoti_.Dispose();
             listener_?.OnStopAccessor();
             this.listener_?.Dispose();
 
