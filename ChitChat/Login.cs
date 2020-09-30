@@ -42,10 +42,10 @@ namespace ChitChat
                 if (check)
                 {
                     var user = new User(usr.Text);
-                    UserMain selectFriendToChat = new UserMain(user);
+                    UserMain userMain = new UserMain(user);
                     this.Hide();
-                    selectFriendToChat.Show();
-                    selectFriendToChat.Closed += (s, args) => this.Show();
+                    userMain.Show();
+                    userMain.Closed += (s, args) => this.Show();
 
                 }
                 else MessageBox.Show("Username or Password is incorrect!");

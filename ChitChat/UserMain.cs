@@ -79,7 +79,7 @@ namespace ChitChat
             }
         }
 
-        private async void load_ContactList()
+        private async Task load_ContactList()
         {
             User user = null;
             using (var database = new Database())
@@ -114,6 +114,12 @@ namespace ChitChat
             var addCon = new AddContact();
             addCon.Show();
             this.Closed += (s, args) => addCon.Close();
+            addCon.FormClosed += AddCon_FormClosed;
+        }
+
+        private async void AddCon_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            
         }
     }
 }
