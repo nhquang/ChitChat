@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -21,9 +20,7 @@ namespace ChitChat
 
         public static List<string> contactsUsernames { get; set; }
 
-        Task updateNoti_ = null;
-
-        public CancellationTokenSource cts_ { get; set; }
+        
 
         #region ctors
         public UserMain()
@@ -65,9 +62,7 @@ namespace ChitChat
 
                 this.listener_ = new Listener();
                 listener_.OnStartAccessor(new string[] { });
-                cts_ = new CancellationTokenSource();
-                this.updateNoti_ = new Task(() => this.updateNotification_(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
-                this.updateNoti_.Start();
+                
 
                 
             }
@@ -80,15 +75,7 @@ namespace ChitChat
         }
 
         
-        private void updateNotification_(CancellationToken token)
-        {
-            while (!token.IsCancellationRequested)
-            {
-                //this.contacts.BeginInvoke((Action)(() => this.updateContactList()));
-                
-
-            }
-        }
+        
 
         private async Task load_ContactList()
         {
@@ -106,12 +93,11 @@ namespace ChitChat
         protected override void OnClosed(EventArgs e)
         {
             
-            cts_.Cancel();
-            this.updateNoti_.Wait();
-            this.updateNoti_.Dispose();
+            
             listener_?.OnStopAccessor();
             this.listener_?.Dispose();
 
+            UserMain.user_.contactIDs_.Clear();
             UserMain.user_ = null;
 
             UserMain.contactsUsernames.Clear();
@@ -128,6 +114,11 @@ namespace ChitChat
             this.Closed += (s, args) => addCon.Close();
         }
 
-        
+        private void chatBtn_Click(object sender, EventArgs e)
+        {
+            var chatting = new Chatting(new User(contacts.SelectedItem.ToString()));
+            chatting.Show();
+            this.Closed += (s, args) => chatting.Close();
+        }
     }
 }

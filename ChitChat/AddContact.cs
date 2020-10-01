@@ -75,6 +75,8 @@ namespace ChitChat
 
         protected override void OnClosed(EventArgs e)
         {
+            this.allUsers_?.Clear();
+            this.allUsers_ = null;
             this.Dispose();
             base.OnClosed(e);
         }

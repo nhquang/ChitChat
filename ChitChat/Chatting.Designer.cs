@@ -28,22 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.content = new System.Windows.Forms.RichTextBox();
+            this.components = new System.ComponentModel.Container();
             this.send = new System.Windows.Forms.RichTextBox();
             this.welcomeLbl = new System.Windows.Forms.Label();
             this.sendBtn = new System.Windows.Forms.Button();
+            this.receiving = new System.Windows.Forms.Timer(this.components);
+            this.content = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // content
-            // 
-            this.content.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.content.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.content.Location = new System.Drawing.Point(12, 79);
-            this.content.Name = "content";
-            this.content.ReadOnly = true;
-            this.content.Size = new System.Drawing.Size(482, 225);
-            this.content.TabIndex = 0;
-            this.content.Text = "";
             // 
             // send
             // 
@@ -59,7 +50,7 @@
             this.welcomeLbl.Font = new System.Drawing.Font("Verdana", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.welcomeLbl.Location = new System.Drawing.Point(9, 9);
             this.welcomeLbl.Name = "welcomeLbl";
-            this.welcomeLbl.Size = new System.Drawing.Size(273, 46);
+            this.welcomeLbl.Size = new System.Drawing.Size(486, 46);
             this.welcomeLbl.TabIndex = 2;
             this.welcomeLbl.Text = "Chatting With ";
             this.welcomeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -77,16 +68,24 @@
             this.sendBtn.Text = "Send";
             this.sendBtn.UseVisualStyleBackColor = false;
             // 
+            // content
+            // 
+            this.content.BackColor = System.Drawing.SystemColors.Window;
+            this.content.Location = new System.Drawing.Point(14, 79);
+            this.content.Name = "content";
+            this.content.Size = new System.Drawing.Size(480, 199);
+            this.content.TabIndex = 8;
+            // 
             // Chatting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.AliceBlue;
             this.ClientSize = new System.Drawing.Size(507, 450);
+            this.Controls.Add(this.content);
             this.Controls.Add(this.sendBtn);
             this.Controls.Add(this.welcomeLbl);
             this.Controls.Add(this.send);
-            this.Controls.Add(this.content);
             this.Name = "Chatting";
             this.Text = "Chatting";
             this.Load += new System.EventHandler(this.Chatting_Load);
@@ -95,10 +94,10 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.RichTextBox content;
         private System.Windows.Forms.RichTextBox send;
         private System.Windows.Forms.Label welcomeLbl;
         private System.Windows.Forms.Button sendBtn;
+        private System.Windows.Forms.Timer receiving;
+        private System.Windows.Forms.Label content;
     }
 }

@@ -13,10 +13,8 @@ namespace ChitChat
 {
     public partial class Chatting : Form
     {
-        Task updateContent = null;
-        CancellationTokenSource cancellationTokenSource = null;
+       
         private User user_ { get; set; }
-
 
         #region Ctors
         public Chatting()
@@ -29,10 +27,8 @@ namespace ChitChat
             InitializeComponent();
             
             this.user_ = user;
-            
-            
+            this.receiving.Tick += (sender, args) => this.displayNewMessage(sender, args);
 
-            this.welcomeLbl.Text += " " + user.name_;
         }
         #endregion
 
@@ -42,11 +38,9 @@ namespace ChitChat
             try
             {
                 user_ = await User.load_UserAsync(user_);
-                this.welcomeLbl.Text += " " + user_.name_;
-
-                cancellationTokenSource = new CancellationTokenSource();
-                updateContent = new Task(() => displayMessageProcess(cancellationTokenSource.Token), cancellationTokenSource.Token, TaskCreationOptions.LongRunning);
-                updateContent.Start();
+                this.welcomeLbl.Text += user_.name_;
+                this.receiving.Start();
+                
             }
             catch(Exception ex)
             {
@@ -58,35 +52,29 @@ namespace ChitChat
         }
 
 
-        void displayMessageProcess(CancellationToken token)
+        void displayNewMessage(object sender, EventArgs args)
         {
-            while (!token.IsCancellationRequested)
+            try
             {
-                try
-                {
-                    if(Listener.messages.TryTake(out string temp))
-                        content.BeginInvoke((Action)(() => this.updateMessageBox(temp)));
-                }
-                catch(Exception ex)
-                {
-                    Logs logs = new Logs();
-                    logs.writeException(ex);
-                }
+
+                if (Listener.incomingMessages.TryTake(out string temp))
+                    content.Text += temp + "\n";
+            }
+            catch (Exception ex)
+            {
+                Logs logs = new Logs();
+                logs.writeException(ex);
             }
         }
         
-        void updateMessageBox(string newMessage)
-        {
-            content.Text += newMessage + "\n";
-        }
+        
 
         protected override void OnClosed(EventArgs e)
         {
             try
             {
-                cancellationTokenSource.Cancel();
-                updateContent.Wait();
-                updateContent.Dispose();
+                this.receiving.Stop();
+                this.receiving.Dispose();
                 base.OnClosed(e);
             }
             catch(Exception ex)

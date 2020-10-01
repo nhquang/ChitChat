@@ -18,18 +18,20 @@ namespace ChitChat
     partial class Listener : ServiceBase
     {
         private UdpClient udpClient_ { get; set; }
-        private Task worker_ { get; set; }
+        private Task receivingWorker_ { get; set; }
+        private Task sendingWorker_ { get; set; }
         private CancellationTokenSource cts_ { get; set; }
-        //private IPEndPoint remoteEP { get; set; }
 
-        public static BlockingCollection<string> messages = new BlockingCollection<string>();
+        
+
+        public static BlockingCollection<string> incomingMessages = new BlockingCollection<string>();
+        public static BlockingCollection<string> outgoingMessages = new BlockingCollection<string>();
 
         public Listener()
         {
             InitializeComponent();
-            //tcpListener_ = new TcpListener(IPAddress.Parse(ConfigurationSettings.AppSettings["localIP"].Trim()), Convert.ToUInt16(ConfigurationSettings.AppSettings["port"].Trim()));
             cts_ = new CancellationTokenSource();
-            //remoteEP = new IPEndPoint(IPAddress.Any, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim()));
+            
         }
         public void OnStartAccessor(string[] args) => this.OnStart(args);
         public void OnStopAccessor() => this.OnStop();
@@ -40,9 +42,15 @@ namespace ChitChat
             try
             {
                 udpClient_ = new UdpClient(Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim()));
+         
 
-                worker_ = new Task(() => this.listening(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
-                worker_.Start();
+
+                receivingWorker_ = new Task(() => this.listening(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
+                receivingWorker_.Start();
+
+                sendingWorker_ = new Task(() => this.sending(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
+                sendingWorker_.Start();
+
                 base.OnStart(args);
             }
             catch (Exception ex)
@@ -61,11 +69,15 @@ namespace ChitChat
             try
             {
                 cts_?.Cancel();
+                
+                receivingWorker_?.Dispose();
+                sendingWorker_?.Dispose();
                 udpClient_?.Close();
                 udpClient_?.Dispose();
-                worker_?.Dispose();
                 cts_?.Dispose();
-                messages?.Dispose();
+
+                incomingMessages?.Dispose();
+                outgoingMessages?.Dispose();
                 base.OnStop();
             }
             catch (Exception ex)
@@ -74,6 +86,25 @@ namespace ChitChat
             }
         }
 
+        private async void sending(CancellationToken ct)
+        {
+            while (!ct.IsCancellationRequested)
+            {
+                try
+                {
+                    if(Listener.outgoingMessages.TryTake(out string temp))
+                    {
+                        byte[] bytes = Encoding.ASCII.GetBytes(temp);
+                        this.udpClient_.SendAsync(bytes, bytes.Length);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Logs logs = new Logs();
+                    logs.writeException(ex);
+                }
+            }
+        }
 
         private async void listening(CancellationToken ct)
         {
@@ -84,22 +115,23 @@ namespace ChitChat
                     try
                     {
                         var received = await udpClient_.ReceiveAsync();
-                        messages.TryAdd(Encoding.ASCII.GetString(received.Buffer));
+                        incomingMessages.TryAdd(Encoding.ASCII.GetString(received.Buffer));
                     }
                     catch (ObjectDisposedException ex)
                     {
                         throw;
                     }
-                    catch (Exception ex)
-                    {
-                        Logs logs = new Logs();
-                        logs.writeException(ex);
-                    }
+                    
                 }
             }
             catch(ObjectDisposedException ex)
             {
 
+            }
+            catch(Exception ex)
+            {
+                Logs logs = new Logs();
+                logs.writeException(ex);
             }
         }
     }

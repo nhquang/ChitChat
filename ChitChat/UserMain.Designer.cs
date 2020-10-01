@@ -68,6 +68,7 @@
             this.chatBtn.TabIndex = 8;
             this.chatBtn.Text = "Chat";
             this.chatBtn.UseVisualStyleBackColor = false;
+            this.chatBtn.Click += new System.EventHandler(this.chatBtn_Click);
             // 
             // notification
             // 
