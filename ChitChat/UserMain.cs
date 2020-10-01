@@ -20,7 +20,7 @@ namespace ChitChat
 
         public static List<string> contactsUsernames { get; set; }
 
-        
+        public static List<User> conversations { get; set; }
 
         #region ctors
         public UserMain()
@@ -33,6 +33,9 @@ namespace ChitChat
 
             UserMain.user_ = user;
             UserMain.contactsUsernames = new List<string>();
+            UserMain.conversations = new List<User>();
+
+
             bs_ = new BindingSource();
             bs_.DataSource = UserMain.contactsUsernames;
         }
@@ -46,7 +49,8 @@ namespace ChitChat
             try
             {
                 UserMain.user_ = await User.load_UserAsync(user_);
-                this.welcomeLbl.Text += " " + user_.name_;
+                this.welcomeLbl.Text += UserMain.user_.name_;
+                this.Text = UserMain.user_.name_;
 
                 
 
@@ -58,7 +62,7 @@ namespace ChitChat
 
                 await Task.Run(() => this.load_ContactList());
                 this.contacts.DataSource = bs_;
-                
+                this.contacts.SetSelected(0, true);
 
                 this.listener_ = new Listener();
                 listener_.OnStartAccessor(new string[] { });
@@ -116,9 +120,22 @@ namespace ChitChat
 
         private void chatBtn_Click(object sender, EventArgs e)
         {
-            var chatting = new Chatting(new User(contacts.SelectedItem.ToString()));
-            chatting.Show();
-            this.Closed += (s, args) => chatting.Close();
+            try
+            {
+                if (!conversations.Select(u => u.username_).Contains(contacts.SelectedItem.ToString()))
+                {
+                    var chatting = new Chatting(new User(contacts.SelectedItem.ToString()));
+                    chatting.Show();
+                    this.Closed += (s, args) => chatting.Close();
+                    UserMain.conversations.Add(new User(contacts.SelectedItem.ToString()));
+                }
+            }
+            catch(Exception ex)
+            {
+                Logs logs = new Logs();
+                logs.writeException(ex);
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

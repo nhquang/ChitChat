@@ -37,7 +37,7 @@
             // 
             // welcomeLbl
             // 
-            this.welcomeLbl.Font = new System.Drawing.Font("Verdana", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.welcomeLbl.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.welcomeLbl.Location = new System.Drawing.Point(12, 9);
             this.welcomeLbl.Name = "welcomeLbl";
             this.welcomeLbl.Size = new System.Drawing.Size(222, 46);

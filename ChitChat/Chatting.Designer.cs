@@ -32,7 +32,7 @@
             this.send = new System.Windows.Forms.RichTextBox();
             this.welcomeLbl = new System.Windows.Forms.Label();
             this.sendBtn = new System.Windows.Forms.Button();
-            this.receiving = new System.Windows.Forms.Timer(this.components);
+            this.timer_ = new System.Windows.Forms.Timer(this.components);
             this.content = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -47,12 +47,12 @@
             // 
             // welcomeLbl
             // 
-            this.welcomeLbl.Font = new System.Drawing.Font("Verdana", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.welcomeLbl.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.welcomeLbl.Location = new System.Drawing.Point(9, 9);
             this.welcomeLbl.Name = "welcomeLbl";
             this.welcomeLbl.Size = new System.Drawing.Size(486, 46);
             this.welcomeLbl.TabIndex = 2;
-            this.welcomeLbl.Text = "Chatting With ";
+            this.welcomeLbl.Text = "Chatting with ";
             this.welcomeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // sendBtn
@@ -67,6 +67,7 @@
             this.sendBtn.TabIndex = 7;
             this.sendBtn.Text = "Send";
             this.sendBtn.UseVisualStyleBackColor = false;
+            this.sendBtn.Click += new System.EventHandler(this.sendBtn_Click);
             // 
             // content
             // 
@@ -97,7 +98,7 @@
         private System.Windows.Forms.RichTextBox send;
         private System.Windows.Forms.Label welcomeLbl;
         private System.Windows.Forms.Button sendBtn;
-        private System.Windows.Forms.Timer receiving;
+        private System.Windows.Forms.Timer timer_;
         private System.Windows.Forms.Label content;
     }
 }

@@ -24,8 +24,8 @@ namespace ChitChat
 
         
 
-        public static BlockingCollection<string> incomingMessages = new BlockingCollection<string>();
-        public static BlockingCollection<string> outgoingMessages = new BlockingCollection<string>();
+        public static BlockingCollection<Tuple<IPEndPoint,string>> incomingMessages = new BlockingCollection<Tuple<IPEndPoint,string>>();
+        public static BlockingCollection<Tuple<IPEndPoint,string>> outgoingMessages = new BlockingCollection<Tuple<IPEndPoint, string>>();
 
         public Listener()
         {
@@ -69,8 +69,9 @@ namespace ChitChat
             try
             {
                 cts_?.Cancel();
-                
+                sendingWorker_.Wait();
                 receivingWorker_?.Dispose();
+
                 sendingWorker_?.Dispose();
                 udpClient_?.Close();
                 udpClient_?.Dispose();
@@ -78,6 +79,7 @@ namespace ChitChat
 
                 incomingMessages?.Dispose();
                 outgoingMessages?.Dispose();
+                
                 base.OnStop();
             }
             catch (Exception ex)
@@ -92,10 +94,10 @@ namespace ChitChat
             {
                 try
                 {
-                    if(Listener.outgoingMessages.TryTake(out string temp))
+                    if(Listener.outgoingMessages.TryTake(out Tuple<IPEndPoint,string> temp))
                     {
-                        byte[] bytes = Encoding.ASCII.GetBytes(temp);
-                        this.udpClient_.SendAsync(bytes, bytes.Length);
+                        byte[] bytes = Encoding.ASCII.GetBytes(temp.Item2);
+                        await this.udpClient_.SendAsync(bytes, bytes.Length, temp.Item1);
                     }
                 }
                 catch(Exception ex)
@@ -115,7 +117,7 @@ namespace ChitChat
                     try
                     {
                         var received = await udpClient_.ReceiveAsync();
-                        incomingMessages.TryAdd(Encoding.ASCII.GetString(received.Buffer));
+                        incomingMessages.TryAdd(new Tuple<IPEndPoint, string>(received.RemoteEndPoint, Encoding.ASCII.GetString(received.Buffer)));
                     }
                     catch (ObjectDisposedException ex)
                     {
