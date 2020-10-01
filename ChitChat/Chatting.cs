@@ -62,7 +62,7 @@ namespace ChitChat
 
                 if (Listener.incomingMessages.TryTake(out Tuple<IPEndPoint,string> temp))
                 {
-                    if (temp.Item1.Address.Equals(UserMain.user_.ip_)) content.Text += temp.Item2.Trim('\n') + "\n";
+                    if (temp.Item1.Address.Equals(UserMain.user_.ip_)) content.Text += this.user_.username_ + ": " + temp.Item2.Trim('\n') + "\n";
                     else Listener.incomingMessages.TryAdd(temp);
                 }
             }
@@ -104,6 +104,8 @@ namespace ChitChat
                 {
                     var package = new Tuple<IPEndPoint, string>(new IPEndPoint(this.user_.ip_, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), send.Text);
                     Listener.outgoingMessages.TryAdd(package);
+                    this.content.Text += "Me: " + send.Text.Trim('\n') + "\n";
+                    this.send.Text = string.Empty;
                 }
             }
             catch(Exception ex)

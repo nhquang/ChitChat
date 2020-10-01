@@ -45,8 +45,10 @@
             // 
             // regLbl
             // 
+            this.regLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.regLbl.BackColor = System.Drawing.Color.Orange;
-            this.regLbl.Dock = System.Windows.Forms.DockStyle.Left;
             this.regLbl.Font = new System.Drawing.Font("Unispace", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.regLbl.Location = new System.Drawing.Point(0, 0);
             this.regLbl.Name = "regLbl";
@@ -57,6 +59,9 @@
             // 
             // username
             // 
+            this.username.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.username.Location = new System.Drawing.Point(359, 154);
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(228, 20);
@@ -64,6 +69,9 @@
             // 
             // name
             // 
+            this.name.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.name.Location = new System.Drawing.Point(359, 44);
             this.name.Name = "name";
             this.name.Size = new System.Drawing.Size(228, 20);
@@ -71,6 +79,9 @@
             // 
             // usrLbl
             // 
+            this.usrLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.usrLbl.BackColor = System.Drawing.Color.AliceBlue;
             this.usrLbl.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.usrLbl.Location = new System.Drawing.Point(224, 151);
@@ -82,6 +93,9 @@
             // 
             // nameLbl
             // 
+            this.nameLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.nameLbl.BackColor = System.Drawing.Color.AliceBlue;
             this.nameLbl.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nameLbl.Location = new System.Drawing.Point(224, 41);
@@ -93,6 +107,9 @@
             // 
             // pwd
             // 
+            this.pwd.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pwd.Location = new System.Drawing.Point(359, 217);
             this.pwd.Name = "pwd";
             this.pwd.PasswordChar = '*';
@@ -101,6 +118,9 @@
             // 
             // noteLbl
             // 
+            this.noteLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.noteLbl.BackColor = System.Drawing.Color.AliceBlue;
             this.noteLbl.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.noteLbl.Location = new System.Drawing.Point(224, 279);
@@ -112,6 +132,9 @@
             // 
             // passLbl
             // 
+            this.passLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.passLbl.BackColor = System.Drawing.Color.AliceBlue;
             this.passLbl.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.passLbl.Location = new System.Drawing.Point(224, 214);
@@ -135,6 +158,9 @@
             // 
             // genderLbl
             // 
+            this.genderLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.genderLbl.BackColor = System.Drawing.Color.AliceBlue;
             this.genderLbl.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.genderLbl.Location = new System.Drawing.Point(224, 97);
@@ -172,6 +198,9 @@
             // 
             // notes
             // 
+            this.notes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.notes.Location = new System.Drawing.Point(359, 279);
             this.notes.Name = "notes";
             this.notes.Size = new System.Drawing.Size(228, 44);
