@@ -105,7 +105,7 @@
             this.Controls.Add(this.chatBtn);
             this.Controls.Add(this.contacts);
             this.Controls.Add(this.welcomeLbl);
-            this.Name = "User Main";
+            this.Name = "UserMain";
             this.Text = "User Main";
             this.Load += new System.EventHandler(this.UserMain_Load);
             this.ResumeLayout(false);

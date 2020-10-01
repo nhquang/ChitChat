@@ -56,6 +56,8 @@ namespace ChitChat
                             await database.addContactAsync(UserMain.user_, temp);
                         }
                         UserMain.user_.contactIDs_.Add(temp.id_);
+                        UserMain.contactsUsernames.Add(temp.username_);
+                        UserMain.bs_.ResetBindings(false);
 
                         MessageBox.Show("New contact has been added!");
                     }

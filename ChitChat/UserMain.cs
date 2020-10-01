@@ -17,7 +17,9 @@ namespace ChitChat
 
         private Listener listener_ { get; set; }
 
-        private List<string> contactsUsernames { get; set; }
+        public static BindingSource bs_ { get; set; }
+
+        public static List<string> contactsUsernames { get; set; }
 
         Task updateNoti_ = null;
 
@@ -33,8 +35,12 @@ namespace ChitChat
             InitializeComponent();
 
             UserMain.user_ = user;
-            contactsUsernames = new List<string>();
+            UserMain.contactsUsernames = new List<string>();
+            bs_ = new BindingSource();
+            bs_.DataSource = UserMain.contactsUsernames;
         }
+
+       
         #endregion
 
 
@@ -51,15 +57,19 @@ namespace ChitChat
                     UserMain.user_.updateUserIPAsync(Utilities.GetLocalIPAddress());
 
 
-                await Task.Run(() => this.load_ContactList());
 
-                this.contacts.DataSource = contactsUsernames;
+
+                await Task.Run(() => this.load_ContactList());
+                this.contacts.DataSource = bs_;
+                
 
                 this.listener_ = new Listener();
                 listener_.OnStartAccessor(new string[] { });
                 cts_ = new CancellationTokenSource();
                 this.updateNoti_ = new Task(() => this.updateNotification_(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
                 this.updateNoti_.Start();
+
+                
             }
             catch(Exception ex)
             {
@@ -69,6 +79,7 @@ namespace ChitChat
             }
         }
 
+        
         private void updateNotification_(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
@@ -87,7 +98,7 @@ namespace ChitChat
                 foreach (var item in UserMain.user_.contactIDs_)
                 {
                     user = await database.selectUserByIDAsync(item);
-                    this.contactsUsernames.Add(user.username_);
+                    UserMain.contactsUsernames.Add(user.username_);
                 }
             }
         }
@@ -102,8 +113,9 @@ namespace ChitChat
             this.listener_?.Dispose();
 
             UserMain.user_ = null;
-            
-           
+
+            UserMain.contactsUsernames.Clear();
+            UserMain.contactsUsernames = null;
 
             this.Dispose();
             base.OnClosed(e);
@@ -114,12 +126,8 @@ namespace ChitChat
             var addCon = new AddContact();
             addCon.Show();
             this.Closed += (s, args) => addCon.Close();
-            addCon.FormClosed += AddCon_FormClosed;
         }
 
-        private async void AddCon_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            
-        }
+        
     }
 }
