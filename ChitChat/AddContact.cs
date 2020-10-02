@@ -25,6 +25,7 @@ namespace ChitChat
         private async void AddContact_Load(object sender, EventArgs e)
         {
             LayoutModifier.centerControlHorizontally(this.addBtn);
+            this.AcceptButton = addBtn;
             try
             {
                 using (var database = new Database())

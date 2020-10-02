@@ -18,7 +18,7 @@ namespace ChitChat
         }
         private void Login_Load(object sender, EventArgs e)
         {
-
+            this.AcceptButton = signInBtn;
         }
         protected override void OnClosed(EventArgs e)
         {
@@ -38,21 +38,26 @@ namespace ChitChat
         {
             try
             {
-                bool check = await Login.authenticationAsync(new Tuple<string, string>(usr.Text, pwd.Text));
-                if (check)
+                if (!string.IsNullOrEmpty(usr.Text) && !string.IsNullOrEmpty(pwd.Text))
                 {
-                    var user = new User(usr.Text);
-                    UserMain userMain = new UserMain(user);
-                    this.Hide();
-                    userMain.Show();
-                    userMain.Closed += (s, args) => this.Show();
+                    bool check = await Login.authenticationAsync(new Tuple<string, string>(usr.Text, pwd.Text));
+                    if (check)
+                    {
+                        var user = new User(usr.Text);
+                        UserMain userMain = new UserMain(user);
+                        this.Hide();
+                        userMain.Show();
+                        userMain.Closed += (s, args) => this.Show();
 
+                    }
+                    else MessageBox.Show("Username or Password is incorrect!");
                 }
-                else MessageBox.Show("Username or Password is incorrect!");
             }
             catch(Exception ex)
             {
-
+                Logs logs = new Logs();
+                logs.writeException(ex);
+                MessageBox.Show(ex.Message);
             }
         }
         private async static Task<bool> authenticationAsync(Tuple<string,string> credentials)
@@ -71,9 +76,6 @@ namespace ChitChat
             }
             catch(Exception ex)
             {
-                Logs logs = new Logs();
-                logs.writeException(ex);
-                MessageBox.Show(ex.Message);
                 throw;
             }
             return false;

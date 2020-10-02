@@ -43,7 +43,7 @@ namespace ChitChat
                 this.welcomeLbl.Text += user_.name_;
                 this.Text = user_.username_;
                 this.timer_.Start();
-                
+                this.AcceptButton = sendBtn;
             }
             catch(Exception ex)
             {
@@ -54,6 +54,7 @@ namespace ChitChat
             }
         }
 
+        
 
         void displayNewMessage(object sender, EventArgs args)
         {
