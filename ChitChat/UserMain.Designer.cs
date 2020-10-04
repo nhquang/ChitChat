@@ -43,7 +43,7 @@
             this.welcomeLbl.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.welcomeLbl.Location = new System.Drawing.Point(12, 9);
             this.welcomeLbl.Name = "welcomeLbl";
-            this.welcomeLbl.Size = new System.Drawing.Size(222, 46);
+            this.welcomeLbl.Size = new System.Drawing.Size(534, 46);
             this.welcomeLbl.TabIndex = 3;
             this.welcomeLbl.Text = "Hi ";
             this.welcomeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -85,7 +85,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.notification.BackColor = System.Drawing.Color.White;
             this.notification.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.notification.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.notification.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.notification.Location = new System.Drawing.Point(350, 93);
             this.notification.Name = "notification";
             this.notification.Size = new System.Drawing.Size(196, 182);
