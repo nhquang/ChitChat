@@ -19,7 +19,7 @@ namespace ChitChat
 
         private void Register_Load(object sender, EventArgs e)
         {
-
+            this.MaximizeBox = false;
         }
 
         protected override void OnClosed(EventArgs e)

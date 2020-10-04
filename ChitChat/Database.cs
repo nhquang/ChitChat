@@ -120,18 +120,15 @@ namespace ChitChat
 
         }
 
-        public async Task<List<int>> selectContactsAsync(int userId)
+        public async Task<Dictionary<int,string>> selectContactsAsync(int userId)
         {
-            var contacts = new List<int>();
+            var contacts = new Dictionary<int, string>();
             var data = new Dictionary<string, object>();
             data.Add("@ID", userId);
             this.constructStoredProcedure("SelectContacts", data);
             var rslt = await sqlCommand_.ExecuteReaderAsync();
             while (rslt.Read())
-            {
-                if ((int)rslt.GetValue(0) == userId) contacts.Add((int)rslt.GetValue(1));
-                else contacts.Add((int)rslt.GetValue(0));
-            }
+                contacts.Add((int)rslt.GetValue(0), rslt.GetString(1));
             rslt.Close();
             return contacts;
 

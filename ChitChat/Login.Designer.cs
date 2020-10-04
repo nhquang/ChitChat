@@ -145,6 +145,7 @@
             this.Controls.Add(this.pwdLbl);
             this.Controls.Add(this.usrLbl);
             this.Controls.Add(this.loginLbl);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Login";
             this.Text = "Login";
             this.Load += new System.EventHandler(this.Login_Load);

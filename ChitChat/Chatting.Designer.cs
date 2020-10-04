@@ -33,7 +33,7 @@
             this.welcomeLbl = new System.Windows.Forms.Label();
             this.sendBtn = new System.Windows.Forms.Button();
             this.timer_ = new System.Windows.Forms.Timer(this.components);
-            this.content = new System.Windows.Forms.Label();
+            this.content = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // send
@@ -83,10 +83,15 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.content.BackColor = System.Drawing.SystemColors.Window;
-            this.content.Location = new System.Drawing.Point(14, 79);
+            this.content.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.content.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.content.Location = new System.Drawing.Point(12, 58);
+            this.content.MaxLength = 0;
             this.content.Name = "content";
-            this.content.Size = new System.Drawing.Size(480, 199);
+            this.content.ReadOnly = true;
+            this.content.Size = new System.Drawing.Size(482, 231);
             this.content.TabIndex = 8;
+            this.content.Text = "";
             // 
             // Chatting
             // 
@@ -98,6 +103,7 @@
             this.Controls.Add(this.sendBtn);
             this.Controls.Add(this.welcomeLbl);
             this.Controls.Add(this.send);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Chatting";
             this.Text = "Chatting";
             this.Load += new System.EventHandler(this.Chatting_Load);
@@ -110,6 +116,6 @@
         private System.Windows.Forms.Label welcomeLbl;
         private System.Windows.Forms.Button sendBtn;
         private System.Windows.Forms.Timer timer_;
-        private System.Windows.Forms.Label content;
+        private System.Windows.Forms.RichTextBox content;
     }
 }

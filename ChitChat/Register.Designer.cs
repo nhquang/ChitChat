@@ -226,6 +226,7 @@
             this.Controls.Add(this.usrLbl);
             this.Controls.Add(this.nameLbl);
             this.Controls.Add(this.regLbl);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Register";
             this.Text = "Register";
             this.Load += new System.EventHandler(this.Register_Load);

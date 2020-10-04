@@ -20,7 +20,7 @@ namespace ChitChat
 
         public static List<string> contactsUsernames { get; set; }
 
-        public static List<User> conversations { get; set; }
+        public static List<string> ongoingConversations { get; set; }
 
         #region ctors
         public UserMain()
@@ -32,12 +32,12 @@ namespace ChitChat
             InitializeComponent();
 
             UserMain.user_ = user;
-            UserMain.contactsUsernames = new List<string>();
-            UserMain.conversations = new List<User>();
+            //UserMain.contactsUsernames = new List<string>();
+            UserMain.ongoingConversations = new List<string>();
 
 
             bs_ = new BindingSource();
-            bs_.DataSource = UserMain.contactsUsernames;
+            
         }
 
        
@@ -51,8 +51,8 @@ namespace ChitChat
                 UserMain.user_ = await User.load_UserAsync(user_);
                 this.welcomeLbl.Text += UserMain.user_.name_;
                 this.Text = UserMain.user_.name_;
+                this.MaximizeBox = false;
 
-                
 
                 if (UserMain.user_.ip_ == null || !Utilities.compareIPs(UserMain.user_.ip_.ToString()))
                     UserMain.user_.updateUserIPAsync(Utilities.GetLocalIPAddress());
@@ -60,9 +60,12 @@ namespace ChitChat
 
 
 
-                await Task.Run(() => this.load_ContactList());
+                //await Task.Run(() => this.load_ContactList());
+
+                UserMain.contactsUsernames = UserMain.user_.contacts_.Values.ToList();
+                bs_.DataSource = UserMain.contactsUsernames;
                 this.contacts.DataSource = bs_;
-                this.contacts.SetSelected(0, true);
+                if(contactsUsernames.Count != 0)this.contacts.SetSelected(0, true);
 
                 this.listener_ = new Listener();
                 listener_.OnStartAccessor(new string[] { });
@@ -81,7 +84,7 @@ namespace ChitChat
         
         
 
-        private async Task load_ContactList()
+        /*private async Task load_ContactList()
         {
             User user = null;
             using (var database = new Database())
@@ -92,7 +95,7 @@ namespace ChitChat
                     UserMain.contactsUsernames.Add(user.username_);
                 }
             }
-        }
+        }*/
 
         protected override void OnClosed(EventArgs e)
         {
@@ -101,7 +104,7 @@ namespace ChitChat
             listener_?.OnStopAccessor();
             this.listener_?.Dispose();
 
-            UserMain.user_.contactIDs_.Clear();
+            UserMain.user_.contacts_.Clear();
             UserMain.user_ = null;
 
             UserMain.contactsUsernames.Clear();
@@ -122,12 +125,12 @@ namespace ChitChat
         {
             try
             {
-                if (!conversations.Select(u => u.username_).Contains(contacts.SelectedItem.ToString()))
+                if (contacts.SelectedItem != null && !ongoingConversations.Contains(contacts.SelectedItem.ToString()))
                 {
                     var chatting = new Chatting(new User(contacts.SelectedItem.ToString()));
                     chatting.Show();
                     this.Closed += (s, args) => chatting.Close();
-                    UserMain.conversations.Add(new User(contacts.SelectedItem.ToString()));
+                    UserMain.ongoingConversations.Add(contacts.SelectedItem.ToString());
                 }
             }
             catch(Exception ex)

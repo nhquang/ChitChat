@@ -20,6 +20,7 @@ namespace ChitChat
         private void Welcome_Load(object sender, EventArgs e)
         {
             LayoutModifier.centerControlHorizontally(signInBtn);
+            this.MaximizeBox = false;
         }
 
         private void signInBtn_Click(object sender, EventArgs e)

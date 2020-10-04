@@ -24,14 +24,15 @@ namespace ChitChat
 
         
 
-        public static BlockingCollection<Tuple<IPEndPoint,string>> incomingMessages = new BlockingCollection<Tuple<IPEndPoint,string>>();
-        public static BlockingCollection<Tuple<IPEndPoint,string>> outgoingMessages = new BlockingCollection<Tuple<IPEndPoint, string>>();
+        public static BlockingCollection<Tuple<IPEndPoint,string>> incomingMessages { get; set; }
+        public static BlockingCollection<Tuple<IPEndPoint, string>> outgoingMessages { get; set; }
 
         public Listener()
         {
             InitializeComponent();
             cts_ = new CancellationTokenSource();
-            
+            Listener.incomingMessages = new BlockingCollection<Tuple<IPEndPoint, string>>();
+            Listener.outgoingMessages = new BlockingCollection<Tuple<IPEndPoint, string>>();
         }
         public void OnStartAccessor(string[] args) => this.OnStart(args);
         public void OnStopAccessor() => this.OnStop();

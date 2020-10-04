@@ -71,6 +71,7 @@
             this.ClientSize = new System.Drawing.Size(634, 411);
             this.Controls.Add(this.img);
             this.Controls.Add(this.signInBtn);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Welcome";
             this.Text = "Welcome";
             this.Load += new System.EventHandler(this.Welcome_Load);

@@ -25,6 +25,7 @@ namespace ChitChat
         private async void AddContact_Load(object sender, EventArgs e)
         {
             LayoutModifier.centerControlHorizontally(this.addBtn);
+            this.MaximizeBox = false;
             this.AcceptButton = addBtn;
             try
             {
@@ -49,14 +50,14 @@ namespace ChitChat
                 if (allUsers_.Select(u => u.username_).Contains(usrname.Text))
                 {
                     var temp = await User.load_UserAsync(new User(usrname.Text));
-                    if (!UserMain.user_.contactIDs_.Contains(temp.id_))
+                    if (!UserMain.user_.contacts_.ContainsKey(temp.id_))
                     {
 
                         using (var database = new Database())
                         {
                             await database.addContactAsync(UserMain.user_, temp);
                         }
-                        UserMain.user_.contactIDs_.Add(temp.id_);
+                        UserMain.user_.contacts_.Add(temp.id_,temp.username_);
                         UserMain.contactsUsernames.Add(temp.username_);
                         UserMain.bs_.ResetBindings(false);
 

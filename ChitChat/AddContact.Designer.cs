@@ -76,6 +76,7 @@
             this.Controls.Add(this.addBtn);
             this.Controls.Add(this.usrLbl);
             this.Controls.Add(this.usrname);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "AddContact";
             this.Text = "AddContact";
             this.Load += new System.EventHandler(this.AddContact_Load);

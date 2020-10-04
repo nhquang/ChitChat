@@ -44,6 +44,7 @@ namespace ChitChat
                 this.Text = user_.username_;
                 this.timer_.Start();
                 this.AcceptButton = sendBtn;
+                this.MaximizeBox = false;
             }
             catch(Exception ex)
             {
@@ -83,7 +84,7 @@ namespace ChitChat
                 this.timer_.Stop();
                 this.timer_.Dispose();
 
-                UserMain.conversations.Remove(new User(this.user_.username_));
+                UserMain.ongoingConversations.Remove(this.user_.username_);
 
                 base.OnClosed(e);
             }

@@ -19,6 +19,7 @@ namespace ChitChat
         private void Login_Load(object sender, EventArgs e)
         {
             this.AcceptButton = signInBtn;
+            this.MaximizeBox = false;
         }
         protected override void OnClosed(EventArgs e)
         {

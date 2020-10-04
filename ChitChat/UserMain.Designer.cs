@@ -54,9 +54,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.contacts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.contacts.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.contacts.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.contacts.FormattingEnabled = true;
-            this.contacts.ItemHeight = 20;
+            this.contacts.ItemHeight = 18;
             this.contacts.Location = new System.Drawing.Point(12, 93);
             this.contacts.Name = "contacts";
             this.contacts.Size = new System.Drawing.Size(304, 182);
@@ -85,10 +85,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.notification.BackColor = System.Drawing.Color.White;
             this.notification.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.notification.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.notification.Location = new System.Drawing.Point(357, 93);
+            this.notification.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.notification.Location = new System.Drawing.Point(350, 93);
             this.notification.Name = "notification";
-            this.notification.Size = new System.Drawing.Size(189, 182);
+            this.notification.Size = new System.Drawing.Size(196, 182);
             this.notification.TabIndex = 9;
             this.notification.Text = "Notification:";
             // 
@@ -119,6 +119,7 @@
             this.Controls.Add(this.chatBtn);
             this.Controls.Add(this.contacts);
             this.Controls.Add(this.welcomeLbl);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "UserMain";
             this.Text = "User Main";
             this.Load += new System.EventHandler(this.UserMain_Load);

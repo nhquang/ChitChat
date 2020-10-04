@@ -17,7 +17,7 @@ namespace ChitChat
         public bool male_ { get; private set; }
         public string note_ { get; private set; }
         public IPAddress ip_ { get; private set; }
-        public List<int> contactIDs_ { get; private set; }
+        public Dictionary<int,string> contacts_ { get; private set; }
 
         public User(int id, string name, string username, string pass, int? age, bool? male, string note, string ip)
         {
@@ -57,7 +57,7 @@ namespace ChitChat
                 using (var database = new Database())
                 {
                     user = await database.selectUserByUsernameAsync(user);
-                    user.contactIDs_ = await database.selectContactsAsync(user.id_);
+                    user.contacts_ = await database.selectContactsAsync(user.id_);
                 }
                 return user;
             }
