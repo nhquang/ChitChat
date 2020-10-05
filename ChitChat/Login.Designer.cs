@@ -85,6 +85,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.usr.Location = new System.Drawing.Point(323, 93);
+            this.usr.MaxLength = 20;
             this.usr.Name = "usr";
             this.usr.Size = new System.Drawing.Size(228, 20);
             this.usr.TabIndex = 3;
@@ -95,6 +96,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pwd.Location = new System.Drawing.Point(323, 177);
+            this.pwd.MaxLength = 16;
             this.pwd.Name = "pwd";
             this.pwd.PasswordChar = '*';
             this.pwd.Size = new System.Drawing.Size(228, 20);

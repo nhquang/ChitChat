@@ -63,6 +63,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.username.Location = new System.Drawing.Point(359, 154);
+            this.username.MaxLength = 20;
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(228, 20);
             this.username.TabIndex = 4;
@@ -73,6 +74,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.name.Location = new System.Drawing.Point(359, 44);
+            this.name.MaxLength = 250;
             this.name.Name = "name";
             this.name.Size = new System.Drawing.Size(228, 20);
             this.name.TabIndex = 1;
@@ -111,6 +113,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pwd.Location = new System.Drawing.Point(359, 217);
+            this.pwd.MaxLength = 16;
             this.pwd.Name = "pwd";
             this.pwd.PasswordChar = '*';
             this.pwd.Size = new System.Drawing.Size(228, 20);

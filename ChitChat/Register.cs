@@ -36,9 +36,9 @@ namespace ChitChat
                 #region Validation
                 if (Validation.onlyLettersVal(name.Text))
                 {
-                    if (Validation.LettersAndNum(username.Text) && username.Text.Length <= 20)
+                    if (Validation.LettersAndNum(username.Text) && username.Text.Length >= 8)
                     {
-                        if (Validation.LettersAndNum(pwd.Text) && pwd.Text.Length <= 16)
+                        if (Validation.LettersAndNum(pwd.Text) && pwd.Text.Length >= 8)
                         {
                             using (var database = new Database())
                             {
@@ -48,9 +48,9 @@ namespace ChitChat
                                 else MessageBox.Show("Username already exists.");
                             }
                         }
-                        else MessageBox.Show("Password can only contain letters and numbers.");
+                        else MessageBox.Show("Password can only contain letters and numbers, and has at least 8 characters.");
                     }
-                    else MessageBox.Show("Username can only contain letters and numbers.");
+                    else MessageBox.Show("Username can only contain letters and numbers, and has at least 8 characters.");
                 }
                 else MessageBox.Show("Name can contain letters only.");
                 #endregion

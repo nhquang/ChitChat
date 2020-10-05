@@ -25,14 +25,14 @@ namespace ChitChat
                 {
                     
                 }
-            
-                
+
+
         }
         public void writeException(Exception ex)
         {
             using (StreamWriter sw = File.AppendText(fileLocation))
             {
-                sw.WriteLine(DateTime.UtcNow.Month + "-" + DateTime.UtcNow.Day + "-" + DateTime.UtcNow.Year + " " + DateTime.UtcNow.Hour + ":" + DateTime.UtcNow.Minute + ":" + DateTime.UtcNow.Second);
+                sw.WriteLine(DateTime.UtcNow.ToString("F"));
                 sw.WriteLine(ex.Message);
                 //sw.WriteLine(ex.HResult);
                 sw.WriteLine(ex.InnerException);

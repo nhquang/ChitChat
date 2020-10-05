@@ -25,7 +25,7 @@ namespace ChitChat
         
 
         public static BlockingCollection<Tuple<IPEndPoint,string>> incomingMessages { get; set; }
-        public static BlockingCollection<Tuple<IPEndPoint, string>> outgoingMessages { get; set; }
+        public static BlockingCollection<Tuple<IPEndPoint,string>> outgoingMessages { get; set; }
 
         public Listener()
         {
