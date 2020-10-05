@@ -12,6 +12,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace ChitChat
 {
@@ -24,15 +25,15 @@ namespace ChitChat
 
         
 
-        public static BlockingCollection<Tuple<IPEndPoint,string>> incomingMessages { get; set; }
-        public static BlockingCollection<Tuple<IPEndPoint,string>> outgoingMessages { get; set; }
+        public static BlockingCollection<Tuple<IPEndPoint,Message>> incomingMessages { get; set; }
+        public static BlockingCollection<Tuple<IPEndPoint,Message>> outgoingMessages { get; set; }
 
         public Listener()
         {
             InitializeComponent();
             cts_ = new CancellationTokenSource();
-            Listener.incomingMessages = new BlockingCollection<Tuple<IPEndPoint, string>>();
-            Listener.outgoingMessages = new BlockingCollection<Tuple<IPEndPoint, string>>();
+            Listener.incomingMessages = new BlockingCollection<Tuple<IPEndPoint, Message>>();
+            Listener.outgoingMessages = new BlockingCollection<Tuple<IPEndPoint, Message>>();
         }
         public void OnStartAccessor(string[] args) => this.OnStart(args);
         public void OnStopAccessor() => this.OnStop();
@@ -95,10 +96,13 @@ namespace ChitChat
             {
                 try
                 {
-                    if(Listener.outgoingMessages.TryTake(out Tuple<IPEndPoint,string> temp))
+                    if(Listener.outgoingMessages.TryTake(out Tuple<IPEndPoint,Message> temp))
                     {
-                        byte[] bytes = Encoding.ASCII.GetBytes(temp.Item2);
+                        //byte[] bytes = Encoding.ASCII.GetBytes(temp.Item2);
+                        //await this.udpClient_.SendAsync(bytes, bytes.Length, temp.Item1);
+                        var bytes = prepareMessage(temp.Item2);
                         await this.udpClient_.SendAsync(bytes, bytes.Length, temp.Item1);
+
                     }
                 }
                 catch(Exception ex)
@@ -118,7 +122,8 @@ namespace ChitChat
                     try
                     {
                         var received = await udpClient_.ReceiveAsync();
-                        incomingMessages.TryAdd(new Tuple<IPEndPoint, string>(received.RemoteEndPoint, Encoding.ASCII.GetString(received.Buffer)));
+                        //incomingMessages.TryAdd(new Tuple<IPEndPoint, string>(received.RemoteEndPoint, Encoding.ASCII.GetString(received.Buffer)));
+                        incomingMessages.TryAdd(new Tuple<IPEndPoint, Message>(received.RemoteEndPoint, parseMessage(received.Buffer)));
                     }
                     catch (ObjectDisposedException ex)
                     {
@@ -136,6 +141,17 @@ namespace ChitChat
                 Logs logs = new Logs();
                 logs.writeException(ex);
             }
+        }
+
+        private byte[] prepareMessage(Message message)
+        {
+            var temp = JsonConvert.SerializeObject(message);
+            return Encoding.ASCII.GetBytes(temp);
+        }
+        private Message parseMessage(byte[] bytes)
+        {
+            var temp = Encoding.ASCII.GetString(bytes);
+            return JsonConvert.DeserializeObject<Message>(temp);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace ChitChat
     public partial class Chatting : Form
     {
        
-        private User user_ { get; set; }
+        private User chattingWith_ { get; set; }
 
         #region Ctors
         public Chatting()
@@ -28,7 +28,7 @@ namespace ChitChat
         {
             InitializeComponent();
             
-            this.user_ = user;
+            this.chattingWith_ = user;
             this.timer_.Tick += (sender, args) => this.displayNewMessage(sender, args);
 
         }
@@ -39,9 +39,9 @@ namespace ChitChat
         {
             try
             {
-                user_ = await User.load_UserAsync(user_);
-                this.welcomeLbl.Text += user_.name_;
-                this.Text = user_.username_;
+                chattingWith_ = await User.load_UserAsync(chattingWith_);
+                this.welcomeLbl.Text += chattingWith_.name_;
+                this.Text = chattingWith_.username_;
                 this.timer_.Start();
                 this.AcceptButton = sendBtn;
                 this.MaximizeBox = false;
@@ -62,10 +62,13 @@ namespace ChitChat
             try
             {
 
-                if (Listener.incomingMessages.TryTake(out Tuple<IPEndPoint,string> temp))
+                if (Listener.incomingMessages.TryTake(out Tuple<IPEndPoint,Message> temp))
                 {
-                    if (temp.Item1.Address.Equals(UserMain.user_.ip_)) content.Text += this.user_.username_ + ": " + temp.Item2.Trim('\n') + "\n";
-                    else Listener.incomingMessages.TryAdd(temp);
+                    if(temp.Item1.Address.Equals(UserMain.user_.ip_) && temp.Item2.receiver.Equals(UserMain.user_.username_) && temp.Item2.sender.Equals(this.chattingWith_.username_))
+                        content.Text += this.chattingWith_.username_ + ": " + temp.Item2.message.Trim() + "\n";
+                    else
+                        Listener.incomingMessages.TryAdd(temp);
+
                 }
             }
             catch (Exception ex)
@@ -84,7 +87,7 @@ namespace ChitChat
                 this.timer_.Stop();
                 this.timer_.Dispose();
 
-                UserMain.ongoingConversations.Remove(this.user_.username_);
+                UserMain.ongoingConversations.Remove(this.chattingWith_.username_);
 
                 base.OnClosed(e);
             }
@@ -104,7 +107,7 @@ namespace ChitChat
             {
                 if (!string.IsNullOrWhiteSpace(send.Text) || !string.IsNullOrEmpty(send.Text))
                 {
-                    var package = new Tuple<IPEndPoint, string>(new IPEndPoint(this.user_.ip_, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), send.Text);
+                    var package = new Tuple<IPEndPoint, Message>(new IPEndPoint(this.chattingWith_.ip_, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), new Message(UserMain.user_.username_, this.chattingWith_.username_, send.Text.Trim('\n')));
                     Listener.outgoingMessages.TryAdd(package);
                     this.content.Text += "Me: " + send.Text.Trim('\n') + "\n";
                     this.send.Text = string.Empty;
