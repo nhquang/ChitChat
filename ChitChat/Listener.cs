@@ -25,14 +25,14 @@ namespace ChitChat
 
         
 
-        public static BlockingCollection<Tuple<IPEndPoint,Message>> incomingMessages { get; set; }
+        public static BlockingCollection<Message> incomingMessages { get; set; }
         public static BlockingCollection<Tuple<IPEndPoint,Message>> outgoingMessages { get; set; }
 
         public Listener()
         {
             InitializeComponent();
             cts_ = new CancellationTokenSource();
-            Listener.incomingMessages = new BlockingCollection<Tuple<IPEndPoint, Message>>();
+            Listener.incomingMessages = new BlockingCollection<Message>();
             Listener.outgoingMessages = new BlockingCollection<Tuple<IPEndPoint, Message>>();
         }
         public void OnStartAccessor(string[] args) => this.OnStart(args);
@@ -98,11 +98,8 @@ namespace ChitChat
                 {
                     if(Listener.outgoingMessages.TryTake(out Tuple<IPEndPoint,Message> temp))
                     {
-                        //byte[] bytes = Encoding.ASCII.GetBytes(temp.Item2);
-                        //await this.udpClient_.SendAsync(bytes, bytes.Length, temp.Item1);
                         var bytes = prepareMessage(temp.Item2);
                         await this.udpClient_.SendAsync(bytes, bytes.Length, temp.Item1);
-
                     }
                 }
                 catch(Exception ex)
@@ -122,12 +119,16 @@ namespace ChitChat
                     try
                     {
                         var received = await udpClient_.ReceiveAsync();
-                        //incomingMessages.TryAdd(new Tuple<IPEndPoint, string>(received.RemoteEndPoint, Encoding.ASCII.GetString(received.Buffer)));
-                        incomingMessages.TryAdd(new Tuple<IPEndPoint, Message>(received.RemoteEndPoint, parseMessage(received.Buffer)));
+                        incomingMessages.TryAdd(parseMessage(received.Buffer));
                     }
                     catch (ObjectDisposedException ex)
                     {
                         throw;
+                    }
+                    catch(Exception ex)
+                    {
+                        Logs logs = new Logs();
+                        logs.writeException(ex);
                     }
                     
                 }
@@ -135,11 +136,6 @@ namespace ChitChat
             catch(ObjectDisposedException ex)
             {
 
-            }
-            catch(Exception ex)
-            {
-                Logs logs = new Logs();
-                logs.writeException(ex);
             }
         }
 

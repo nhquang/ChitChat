@@ -28,11 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.welcomeLbl = new System.Windows.Forms.Label();
             this.contacts = new System.Windows.Forms.ListBox();
             this.chatBtn = new System.Windows.Forms.Button();
-            this.notification = new System.Windows.Forms.Label();
             this.addCtBtn = new System.Windows.Forms.Button();
+            this.checkNoti_ = new System.Windows.Forms.Timer(this.components);
+            this.notificationBox = new System.Windows.Forms.RichTextBox();
+            this.organizeMessages_ = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // welcomeLbl
@@ -78,20 +81,6 @@
             this.chatBtn.UseVisualStyleBackColor = false;
             this.chatBtn.Click += new System.EventHandler(this.chatBtn_Click);
             // 
-            // notification
-            // 
-            this.notification.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.notification.BackColor = System.Drawing.Color.White;
-            this.notification.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.notification.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.notification.Location = new System.Drawing.Point(350, 93);
-            this.notification.Name = "notification";
-            this.notification.Size = new System.Drawing.Size(196, 182);
-            this.notification.TabIndex = 9;
-            this.notification.Text = "Notification:";
-            // 
             // addCtBtn
             // 
             this.addCtBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -108,14 +97,27 @@
             this.addCtBtn.UseVisualStyleBackColor = false;
             this.addCtBtn.Click += new System.EventHandler(this.addCtBtn_Click);
             // 
+            // notificationBox
+            // 
+            this.notificationBox.BackColor = System.Drawing.SystemColors.Window;
+            this.notificationBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.notificationBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.notificationBox.Location = new System.Drawing.Point(359, 93);
+            this.notificationBox.MaxLength = 0;
+            this.notificationBox.Name = "notificationBox";
+            this.notificationBox.ReadOnly = true;
+            this.notificationBox.Size = new System.Drawing.Size(187, 182);
+            this.notificationBox.TabIndex = 11;
+            this.notificationBox.Text = "";
+            // 
             // UserMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.AliceBlue;
             this.ClientSize = new System.Drawing.Size(558, 347);
+            this.Controls.Add(this.notificationBox);
             this.Controls.Add(this.addCtBtn);
-            this.Controls.Add(this.notification);
             this.Controls.Add(this.chatBtn);
             this.Controls.Add(this.contacts);
             this.Controls.Add(this.welcomeLbl);
@@ -132,7 +134,9 @@
         private System.Windows.Forms.Label welcomeLbl;
         private System.Windows.Forms.ListBox contacts;
         private System.Windows.Forms.Button chatBtn;
-        private System.Windows.Forms.Label notification;
         private System.Windows.Forms.Button addCtBtn;
+        private System.Windows.Forms.Timer checkNoti_;
+        private System.Windows.Forms.RichTextBox notificationBox;
+        private System.Windows.Forms.Timer organizeMessages_;
     }
 }

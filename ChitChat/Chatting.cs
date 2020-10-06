@@ -42,9 +42,12 @@ namespace ChitChat
                 chattingWith_ = await User.load_UserAsync(chattingWith_);
                 this.welcomeLbl.Text += chattingWith_.name_;
                 this.Text = chattingWith_.username_;
-                this.timer_.Start();
+                
                 this.AcceptButton = sendBtn;
                 this.MaximizeBox = false;
+                await displayUnreadMessages();
+                this.timer_.Start();
+                var a = 1;
             }
             catch(Exception ex)
             {
@@ -55,21 +58,32 @@ namespace ChitChat
             }
         }
 
-        
+        async Task displayUnreadMessages()
+        {
+            for(int i = 0; i < UserMain.reservedMessages.Count; i++)
+            {
+                if (UserMain.reservedMessages[i].sender.Equals(this.chattingWith_.username_))
+                {
+                    this.content.Text += chattingWith_.username_ + ": " + UserMain.reservedMessages[i].message.Trim();
+                    UserMain.reservedMessages.RemoveAt(i);
+                }
+            }
+        }
 
         void displayNewMessage(object sender, EventArgs args)
         {
             try
             {
-
-                if (Listener.incomingMessages.TryTake(out Tuple<IPEndPoint,Message> temp))
+                for(int i = 0; i < UserMain.messagesToBeDisplayed.Count; i++)
                 {
-                    if(temp.Item1.Address.Equals(UserMain.user_.ip_) && temp.Item2.receiver.Equals(UserMain.user_.username_) && temp.Item2.sender.Equals(this.chattingWith_.username_))
-                        content.Text += this.chattingWith_.username_ + ": " + temp.Item2.message.Trim() + "\n";
-                    else
-                        Listener.incomingMessages.TryAdd(temp);
-
+                    if (UserMain.messagesToBeDisplayed[i].sender.Equals(this.chattingWith_.username_))
+                    {
+                        this.content.Text += chattingWith_.username_ + ": " + UserMain.messagesToBeDisplayed[i].message.Trim();
+                        UserMain.messagesToBeDisplayed.RemoveAt(i);
+                    }
                 }
+                
+                
             }
             catch (Exception ex)
             {

@@ -80,7 +80,7 @@ namespace ChitChat
             this.constructStoredProcedure("SelectUserByID", data);
             var rslt = await sqlCommand_.ExecuteReaderAsync();
             while (rslt.Read())
-                user = new User(rslt.GetString(2));
+                user = new User((int)rslt.GetValue(0), rslt.GetString(1), rslt.GetString(2), null, null, (bool)rslt.GetValue(5), rslt.GetString(6), rslt.IsDBNull(7) ? null : rslt.GetString(7));
             rslt.Close();
             return user;
         }

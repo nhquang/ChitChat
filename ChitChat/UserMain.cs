@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ChitChat
@@ -23,7 +24,11 @@ namespace ChitChat
 
         public static List<string> ongoingConversations { get; set; }
 
-        public static List<Tuple<IPEndPoint,Message>> notifications { get; set; }
+        public static List<Message> messagesToBeDisplayed { get; set; } 
+
+        public static List<Message> reservedMessages { get; set; }
+
+        public static Queue<Message> notifications { get; set; }
 
         #region ctors
         public UserMain()
@@ -35,15 +40,64 @@ namespace ChitChat
             InitializeComponent();
 
             UserMain.user_ = user;
-            //UserMain.contactsUsernames = new List<string>();
+
             UserMain.ongoingConversations = new List<string>();
 
+            UserMain.notifications = new Queue<Message>();
+
+            UserMain.reservedMessages = new List<Message>();
+
+            UserMain.messagesToBeDisplayed = new List<Message>();
 
             bs_ = new BindingSource();
-            
+
+            organizeMessages_.Tick += OrganizeMessages__Tick;
+
+            checkNoti_.Tick += CheckNoti__Tick;
         }
 
-       
+        private void OrganizeMessages__Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Listener.incomingMessages.TryTake(out Message newMessage) && newMessage.receiver.Equals(UserMain.user_.username_))
+                {
+                    if (UserMain.ongoingConversations.Contains(newMessage.sender)) UserMain.messagesToBeDisplayed.Add(newMessage);
+                    else
+                    {
+                        reservedMessages.Add(newMessage);
+                        notifications.Enqueue(newMessage);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Logs logs = new Logs();
+                logs.writeException(ex);
+            }
+        }
+
+        private void CheckNoti__Tick(object sender, EventArgs e)
+        {
+            Message temp = null;
+            try
+            {
+
+                if(reservedMessages.Count > 0)
+                {
+                    temp = notifications.Dequeue();
+                    notificationBox.Text += "You got a new message from " + temp.sender + "\n";
+                }
+                
+            }
+            catch(Exception ex)
+            {
+                Logs logs = new Logs();
+                logs.writeException(ex);
+            }
+        }
+
+
         #endregion
 
 
@@ -72,7 +126,9 @@ namespace ChitChat
 
                 this.listener_ = new Listener();
                 listener_.OnStartAccessor(new string[] { });
-                
+
+                organizeMessages_.Start();
+                checkNoti_.Start();
 
                 
             }
@@ -85,8 +141,6 @@ namespace ChitChat
         }
 
         
-        
-
         /*private async Task load_ContactList()
         {
             User user = null;
@@ -103,18 +157,37 @@ namespace ChitChat
         protected override void OnClosed(EventArgs e)
         {
             
+                organizeMessages_.Stop();
+                organizeMessages_.Dispose();
+
+                checkNoti_.Stop();
+                checkNoti_.Dispose();
+
+                listener_?.OnStopAccessor();
+                this.listener_?.Dispose();
+
+                UserMain.user_.contacts_.Clear();
+                UserMain.user_ = null;
+
+                UserMain.contactsUsernames.Clear();
+                UserMain.contactsUsernames = null;
+
+                UserMain.ongoingConversations.Clear();
+                UserMain.ongoingConversations = null;
+
+                UserMain.notifications.Clear();
+                UserMain.notifications = null;
+
+                UserMain.reservedMessages.Clear();
+                UserMain.reservedMessages = null;
+
+                UserMain.messagesToBeDisplayed.Clear();
+                UserMain.messagesToBeDisplayed = null;
+
+
+                this.Dispose();
+                base.OnClosed(e);
             
-            listener_?.OnStopAccessor();
-            this.listener_?.Dispose();
-
-            UserMain.user_.contacts_.Clear();
-            UserMain.user_ = null;
-
-            UserMain.contactsUsernames.Clear();
-            UserMain.contactsUsernames = null;
-
-            this.Dispose();
-            base.OnClosed(e);
         }
 
         private void addCtBtn_Click(object sender, EventArgs e)
