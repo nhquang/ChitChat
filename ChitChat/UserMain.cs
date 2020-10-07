@@ -130,7 +130,7 @@ namespace ChitChat
             try
             {
 
-                if (reservedMessages.Count > 0)
+                if (notifications.Count > 0)
                 {
                     temp = notifications.Dequeue();
                     notificationBox.Text += "You got a new message from " + temp.sender + "\n";
