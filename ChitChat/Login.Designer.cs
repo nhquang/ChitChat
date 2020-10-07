@@ -39,8 +39,10 @@
             // 
             // loginLbl
             // 
+            this.loginLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.loginLbl.BackColor = System.Drawing.Color.Orange;
-            this.loginLbl.Dock = System.Windows.Forms.DockStyle.Left;
             this.loginLbl.Font = new System.Drawing.Font("Unispace", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.loginLbl.Location = new System.Drawing.Point(0, 0);
             this.loginLbl.Name = "loginLbl";
@@ -51,6 +53,9 @@
             // 
             // usrLbl
             // 
+            this.usrLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.usrLbl.BackColor = System.Drawing.Color.AliceBlue;
             this.usrLbl.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.usrLbl.Location = new System.Drawing.Point(188, 93);
@@ -62,6 +67,9 @@
             // 
             // pwdLbl
             // 
+            this.pwdLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pwdLbl.BackColor = System.Drawing.Color.AliceBlue;
             this.pwdLbl.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pwdLbl.Location = new System.Drawing.Point(188, 177);
@@ -73,14 +81,22 @@
             // 
             // usr
             // 
+            this.usr.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.usr.Location = new System.Drawing.Point(323, 93);
+            this.usr.MaxLength = 20;
             this.usr.Name = "usr";
             this.usr.Size = new System.Drawing.Size(228, 20);
             this.usr.TabIndex = 3;
             // 
             // pwd
             // 
+            this.pwd.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pwd.Location = new System.Drawing.Point(323, 177);
+            this.pwd.MaxLength = 16;
             this.pwd.Name = "pwd";
             this.pwd.PasswordChar = '*';
             this.pwd.Size = new System.Drawing.Size(228, 20);
@@ -131,8 +147,10 @@
             this.Controls.Add(this.pwdLbl);
             this.Controls.Add(this.usrLbl);
             this.Controls.Add(this.loginLbl);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Login";
             this.Text = "Login";
+            this.Load += new System.EventHandler(this.Login_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

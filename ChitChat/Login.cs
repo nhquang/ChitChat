@@ -18,7 +18,8 @@ namespace ChitChat
         }
         private void Login_Load(object sender, EventArgs e)
         {
-            
+            this.AcceptButton = signInBtn;
+            this.MaximizeBox = false;
         }
         protected override void OnClosed(EventArgs e)
         {
@@ -34,32 +35,23 @@ namespace ChitChat
             reg.Closed += (s, args) => this.Show();
         }
 
-        private void signInBtn_Click(object sender, EventArgs e)
+        private async void signInBtn_Click(object sender, EventArgs e)
         {
-
-            if (Login.authentication(new Tuple<string, string>(usr.Text, pwd.Text)))
-            {
-                Dashboard dashboard = new Dashboard();
-                this.Hide();
-                dashboard.Show();
-                dashboard.Closed += (s, args) => this.Show();
-            }
-            else MessageBox.Show("Username or Password is incorrect!");
-
-        }
-        private static bool authentication(Tuple<string,string> credentials)
-        {
-            User user = new User(credentials.Item1);
-            string temp = string.Empty;
             try
             {
-                using (var database = new Database())
+                if (!string.IsNullOrEmpty(usr.Text) && !string.IsNullOrEmpty(pwd.Text))
                 {
-                    if (database.UserExists(user))
+                    bool check = await Login.authenticationAsync(new Tuple<string, string>(usr.Text, pwd.Text));
+                    if (check)
                     {
-                        if (Password.hashPassword(credentials.Item2).Equals(database.userPwd(user)))
-                            return true;
+                        var user = new User(usr.Text);
+                        UserMain userMain = new UserMain(user);
+                        this.Hide();
+                        userMain.Show();
+                        userMain.Closed += (s, args) => this.Show();
+
                     }
+                    else MessageBox.Show("Username or Password is incorrect!");
                 }
             }
             catch(Exception ex)
@@ -67,6 +59,25 @@ namespace ChitChat
                 Logs logs = new Logs();
                 logs.writeException(ex);
                 MessageBox.Show(ex.Message);
+            }
+        }
+        private async static Task<bool> authenticationAsync(Tuple<string,string> credentials)
+        {
+            User user = new User(credentials.Item1);
+            string temp = string.Empty;
+            try
+            {
+                using (var database = new Database())
+                {
+                    bool check = await database.UserExistsAsync(user);
+                    if (check)
+                        if (Utilities.hashPassword(credentials.Item2).Equals(database.userPwd(user)))
+                            return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw;
             }
             return false;
         }

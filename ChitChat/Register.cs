@@ -19,7 +19,7 @@ namespace ChitChat
 
         private void Register_Load(object sender, EventArgs e)
         {
-
+            this.MaximizeBox = false;
         }
 
         protected override void OnClosed(EventArgs e)
@@ -28,7 +28,7 @@ namespace ChitChat
             base.OnClosed(e);
         }
 
-        private void regBtn_Click(object sender, EventArgs e)
+        private async void regBtn_Click(object sender, EventArgs e)
         {
             bool pass = false;
             try
@@ -36,33 +36,37 @@ namespace ChitChat
                 #region Validation
                 if (Validation.onlyLettersVal(name.Text))
                 {
-                    if (Validation.LettersAndNum(username.Text) && username.Text.Length <= 20)
+                    if (Validation.LettersAndNum(username.Text) && username.Text.Length >= 8)
                     {
-                        if (Validation.LettersAndNum(pwd.Text) && pwd.Text.Length <= 16)
+                        if (Validation.LettersAndNum(pwd.Text) && pwd.Text.Length >= 8)
                         {
                             using (var database = new Database())
                             {
                                 User user = new User(username.Text);
-                                if (!database.UserExists(user)) pass = true;
+                                bool check = await database.UserExistsAsync(user);
+                                if (!check) pass = true;
                                 else MessageBox.Show("Username already exists.");
                             }
                         }
-                        else MessageBox.Show("Password can only contain letters and numbers.");
+                        else MessageBox.Show("Password can only contain letters and numbers, and has at least 8 characters.");
                     }
-                    else MessageBox.Show("Username can only contain letters and numbers.");
+                    else MessageBox.Show("Username can only contain letters and numbers, and has at least 8 characters.");
                 }
                 else MessageBox.Show("Name can contain letters only.");
                 #endregion
 
+
+
                 if (pass)
                 {
-                    User user = new User(name.Text, username.Text, Password.hashPassword(pwd.Text), null, male.Checked, notes.Text);
+
+                    User user = new User(name.Text, username.Text, Utilities.hashPassword(pwd.Text), null, male.Checked, notes.Text, Utilities.GetLocalIPAddress());
 
                     try
                     {
                         using (var database = new Database())
                         {
-                            database.addUser(user);
+                            await database.addUserAsync(user);
                         }
                         MessageBox.Show("You have successfully registered!");
                         this.Close();
@@ -83,10 +87,6 @@ namespace ChitChat
                 var logs = new Logs();
                 logs.writeException(ex);
             }
-
-
         }
-
-        
     }
 }
