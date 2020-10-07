@@ -22,7 +22,9 @@ namespace ChitChat
 
         public static List<string> contactsUsernames { get; set; }
 
-        public static List<string> ongoingConversations { get; set; }
+        //public static List<string> ongoingConversations { get; set; }
+
+        public static Dictionary<string, Chatting> ongoingConversations { get; set; }
 
         public static List<Message> messagesToBeDisplayed { get; set; } 
 
@@ -41,7 +43,7 @@ namespace ChitChat
 
             UserMain.user_ = user;
 
-            UserMain.ongoingConversations = new List<string>();
+            UserMain.ongoingConversations = new Dictionary<string, Chatting>();
 
             UserMain.notifications = new Queue<Message>();
 
@@ -62,7 +64,7 @@ namespace ChitChat
             {
                 if (Listener.incomingMessages.TryTake(out Message newMessage) && newMessage.receiver.Equals(UserMain.user_.username_))
                 {
-                    if (UserMain.ongoingConversations.Contains(newMessage.sender)) UserMain.messagesToBeDisplayed.Add(newMessage);
+                    if (UserMain.ongoingConversations.ContainsKey(newMessage.sender)) UserMain.messagesToBeDisplayed.Add(newMessage);
                     else
                     {
                         reservedMessages.Add(newMessage);
@@ -157,37 +159,43 @@ namespace ChitChat
         protected override void OnClosed(EventArgs e)
         {
             
-                organizeMessages_.Stop();
-                organizeMessages_.Dispose();
 
-                checkNoti_.Stop();
-                checkNoti_.Dispose();
+            organizeMessages_.Stop();
+            organizeMessages_.Dispose();
 
-                listener_?.OnStopAccessor();
-                this.listener_?.Dispose();
+            checkNoti_.Stop();
+            checkNoti_.Dispose();
 
-                UserMain.user_.contacts_.Clear();
-                UserMain.user_ = null;
+            for(int i = UserMain.ongoingConversations.Count - 1; i >= 0; i--)
+            {
+                UserMain.ongoingConversations.ElementAt(i).Value.Close();
+            }
 
-                UserMain.contactsUsernames.Clear();
-                UserMain.contactsUsernames = null;
+            listener_?.OnStopAccessor();
+            this.listener_?.Dispose();
 
-                UserMain.ongoingConversations.Clear();
-                UserMain.ongoingConversations = null;
+            UserMain.user_.contacts_.Clear();
+            UserMain.user_ = null;
 
-                UserMain.notifications.Clear();
-                UserMain.notifications = null;
+            UserMain.contactsUsernames.Clear();
+            UserMain.contactsUsernames = null;
 
-                UserMain.reservedMessages.Clear();
-                UserMain.reservedMessages = null;
+            UserMain.ongoingConversations.Clear();
+            UserMain.ongoingConversations = null;
 
-                UserMain.messagesToBeDisplayed.Clear();
-                UserMain.messagesToBeDisplayed = null;
+            UserMain.notifications.Clear();
+            UserMain.notifications = null;
+
+            UserMain.reservedMessages.Clear();
+            UserMain.reservedMessages = null;
+
+            UserMain.messagesToBeDisplayed.Clear();
+            UserMain.messagesToBeDisplayed = null;
 
 
-                this.Dispose();
-                base.OnClosed(e);
-            
+            this.Dispose();
+            base.OnClosed(e);
+
         }
 
         private void addCtBtn_Click(object sender, EventArgs e)
@@ -201,12 +209,11 @@ namespace ChitChat
         {
             try
             {
-                if (contacts.SelectedItem != null && !ongoingConversations.Contains(contacts.SelectedItem.ToString()))
+                if (contacts.SelectedItem != null && !ongoingConversations.ContainsKey(contacts.SelectedItem.ToString()))
                 {
                     var chatting = new Chatting(new User(contacts.SelectedItem.ToString()));
                     chatting.Show();
-                    this.Closed += (s, args) => chatting.Close();
-                    UserMain.ongoingConversations.Add(contacts.SelectedItem.ToString());
+                    UserMain.ongoingConversations.Add(contacts.SelectedItem.ToString(), chatting);
                 }
             }
             catch(Exception ex)

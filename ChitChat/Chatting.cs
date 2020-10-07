@@ -45,9 +45,8 @@ namespace ChitChat
                 
                 this.AcceptButton = sendBtn;
                 this.MaximizeBox = false;
-                await displayUnreadMessages();
+                displayUnreadMessages();
                 this.timer_.Start();
-                var a = 1;
             }
             catch(Exception ex)
             {
@@ -58,15 +57,22 @@ namespace ChitChat
             }
         }
 
-        async Task displayUnreadMessages()
+        void displayUnreadMessages()
         {
-            for(int i = 0; i < UserMain.reservedMessages.Count; i++)
+            var temp = new List<int>();
+            foreach(var message in UserMain.reservedMessages)
             {
-                if (UserMain.reservedMessages[i].sender.Equals(this.chattingWith_.username_))
+                int i = 0;
+                if (message.sender.Equals(this.chattingWith_.username_))
                 {
-                    this.content.Text += chattingWith_.username_ + ": " + UserMain.reservedMessages[i].message.Trim();
-                    UserMain.reservedMessages.RemoveAt(i);
+                    this.content.Text += chattingWith_.username_ + ": " + message.message.Trim() + "\n";
+                    temp.Add(i);
                 }
+                i++;
+            }
+            foreach(var idx in temp)
+            {
+                UserMain.reservedMessages.RemoveAt(idx);
             }
         }
 
@@ -74,16 +80,32 @@ namespace ChitChat
         {
             try
             {
-                for(int i = 0; i < UserMain.messagesToBeDisplayed.Count; i++)
+                /*for(int i = 0; i < UserMain.messagesToBeDisplayed.Count; i++)
                 {
                     if (UserMain.messagesToBeDisplayed[i].sender.Equals(this.chattingWith_.username_))
                     {
-                        this.content.Text += chattingWith_.username_ + ": " + UserMain.messagesToBeDisplayed[i].message.Trim();
+                        this.content.Text += chattingWith_.username_ + ": " + UserMain.messagesToBeDisplayed[i].message.Trim() + "\n";
                         UserMain.messagesToBeDisplayed.RemoveAt(i);
                     }
+                }*/
+
+                var temp = new List<int>();
+                foreach (var message in UserMain.messagesToBeDisplayed)
+                {
+                    int i = 0;
+                    if (message.sender.Equals(this.chattingWith_.username_))
+                    {
+                        this.content.Text += chattingWith_.username_ + ": " + message.message.Trim() + "\n";
+                        temp.Add(i);
+                    }
+                    i++;
                 }
-                
-                
+                foreach (var idx in temp)
+                {
+                    UserMain.messagesToBeDisplayed.RemoveAt(idx);
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -103,6 +125,7 @@ namespace ChitChat
 
                 UserMain.ongoingConversations.Remove(this.chattingWith_.username_);
 
+                this.Dispose();
                 base.OnClosed(e);
             }
             catch(Exception ex)
