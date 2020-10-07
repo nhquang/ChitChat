@@ -58,46 +58,7 @@ namespace ChitChat
             checkNoti_.Tick += CheckNoti__Tick;
         }
 
-        private void OrganizeMessages__Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Listener.incomingMessages.TryTake(out Message newMessage) && newMessage.receiver.Equals(UserMain.user_.username_))
-                {
-                    if (UserMain.ongoingConversations.ContainsKey(newMessage.sender)) UserMain.messagesToBeDisplayed.Add(newMessage);
-                    else
-                    {
-                        reservedMessages.Add(newMessage);
-                        notifications.Enqueue(newMessage);
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                Logs logs = new Logs();
-                logs.writeException(ex);
-            }
-        }
-
-        private void CheckNoti__Tick(object sender, EventArgs e)
-        {
-            Message temp = null;
-            try
-            {
-
-                if(reservedMessages.Count > 0)
-                {
-                    temp = notifications.Dequeue();
-                    notificationBox.Text += "You got a new message from " + temp.sender + "\n";
-                }
-                
-            }
-            catch(Exception ex)
-            {
-                Logs logs = new Logs();
-                logs.writeException(ex);
-            }
-        }
+        
 
 
         #endregion
@@ -142,7 +103,47 @@ namespace ChitChat
             }
         }
 
-        
+        private void OrganizeMessages__Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Listener.incomingMessages.TryTake(out Message newMessage) && newMessage.receiver.Equals(UserMain.user_.username_))
+                {
+                    if (UserMain.ongoingConversations.ContainsKey(newMessage.sender)) UserMain.messagesToBeDisplayed.Add(newMessage);
+                    else
+                    {
+                        reservedMessages.Add(newMessage);
+                        notifications.Enqueue(newMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logs logs = new Logs();
+                logs.writeException(ex);
+            }
+        }
+
+        private void CheckNoti__Tick(object sender, EventArgs e)
+        {
+            Message temp = null;
+            try
+            {
+
+                if (reservedMessages.Count > 0)
+                {
+                    temp = notifications.Dequeue();
+                    notificationBox.Text += "You got a new message from " + temp.sender + "\n";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logs logs = new Logs();
+                logs.writeException(ex);
+            }
+        }
+
         /*private async Task load_ContactList()
         {
             User user = null;

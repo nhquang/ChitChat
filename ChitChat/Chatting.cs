@@ -45,7 +45,8 @@ namespace ChitChat
                 
                 this.AcceptButton = sendBtn;
                 this.MaximizeBox = false;
-                displayUnreadMessages();
+                //displayUnreadMessages();
+                await Task.Run(() => this.displayUnreadMessages());
                 this.timer_.Start();
             }
             catch(Exception ex)
