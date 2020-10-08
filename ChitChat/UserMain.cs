@@ -47,7 +47,7 @@ namespace ChitChat
 
             UserMain.notifications = new Queue<Message>();
 
-            UserMain.reservedMessages = new List<Message>();
+            UserMain.reservedMessages = new List<Message>();            //unread messages
 
             UserMain.messagesToBeDisplayed = new List<Message>();
 

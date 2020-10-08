@@ -46,10 +46,11 @@ namespace ChitChat
                 udpClient_ = new UdpClient(Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim()));
          
 
-
+                //Start receiving messages Task
                 receivingWorker_ = new Task(() => this.listening(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
                 receivingWorker_.Start();
 
+                //Start sending messages Task
                 sendingWorker_ = new Task(() => this.sending(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
                 sendingWorker_.Start();
 
@@ -89,7 +90,7 @@ namespace ChitChat
                 throw;
             }
         }
-
+        //sending out messages
         private async void sending(CancellationToken ct)
         {
             while (!ct.IsCancellationRequested)
@@ -109,7 +110,7 @@ namespace ChitChat
                 }
             }
         }
-
+        //Waiting for incoming messages
         private async void listening(CancellationToken ct)
         {
             try
