@@ -202,8 +202,8 @@ namespace ChitChat
         private void addCtBtn_Click(object sender, EventArgs e)
         {
             var addCon = new AddContact();
-            addCon.Show();
-            this.Closed += (s, args) => addCon.Close();
+            addCon.ShowDialog();
+            //this.Closed += (s, args) => addCon.Close();
         }
 
         private void chatBtn_Click(object sender, EventArgs e)
