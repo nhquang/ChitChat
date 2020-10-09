@@ -47,7 +47,7 @@ namespace ChitChat
          
 
                 //Start receiving messages Task
-                receivingWorker_ = new Task(() => this.listening(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
+                receivingWorker_ = new Task(() => this.receiving(cts_.Token), cts_.Token, TaskCreationOptions.LongRunning);
                 receivingWorker_.Start();
 
                 //Start sending messages Task
@@ -111,7 +111,7 @@ namespace ChitChat
             }
         }
         //Waiting for incoming messages
-        private async void listening(CancellationToken ct)
+        private async void receiving(CancellationToken ct)
         {
             try
             {
