@@ -31,6 +31,7 @@ namespace ChitChat
             {
                 using (var database = new Database())
                 {
+                    await database.openDatabaseAsync();
                     allUsers_ = await database.selectAllUsersAsync();
                 }
                 this.usrname.AutoCompleteCustomSource.AddRange(allUsers_.Select(u => u.username_).Where(u => u.Equals(UserMain.user_.username_) ==  false).ToArray());
@@ -55,6 +56,7 @@ namespace ChitChat
 
                         using (var database = new Database())
                         {
+                            await database.openDatabaseAsync();
                             await database.addContactAsync(UserMain.user_, temp);
                         }
                         UserMain.user_.contacts_.Add(temp.id_,temp.username_);

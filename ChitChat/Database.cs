@@ -19,10 +19,14 @@ namespace ChitChat
         public Database()
         {
             sql_ = new SqlConnection(ConfigurationSettings.AppSettings["connectionString"].Trim().Replace("{your_password}", Utilities.decryption(ConfigurationSettings.AppSettings["password"].Trim())));
-            if (sql_.State == System.Data.ConnectionState.Closed)
-                sql_.Open();
-
         }
+
+        public async Task openDatabaseAsync()
+        {
+            if (sql_.State == System.Data.ConnectionState.Closed)
+                await sql_.OpenAsync();
+        }
+
         public async Task addUserAsync(User user)
         {
             var data = new Dictionary<string, object>();

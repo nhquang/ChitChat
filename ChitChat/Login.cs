@@ -69,6 +69,7 @@ namespace ChitChat
             {
                 using (var database = new Database())
                 {
+                    await database.openDatabaseAsync();
                     object check = await database.selectUsersDataByUsernameAsync(user, Type.exists);
                     if (check != null && (bool)check)
                         if (Utilities.hashPassword(credentials.Item2).Equals(await database.selectUsersDataByUsernameAsync(user, Type.password)))

@@ -56,6 +56,7 @@ namespace ChitChat
             {
                 using (var database = new Database())
                 {
+                    await database.openDatabaseAsync();
                     user = await database.selectUserByUsernameAsync(user);
                     user.contacts_ = await database.selectContactsAsync(user.id_);
                 }
@@ -72,6 +73,7 @@ namespace ChitChat
             this.ip_ = IPAddress.Parse(newIp);
             using (var database = new Database())
             {
+                await database.openDatabaseAsync();
                 database.updateIPAsync(this.username_, newIp);
             }
         }

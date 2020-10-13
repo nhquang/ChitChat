@@ -42,6 +42,7 @@ namespace ChitChat
                         {
                             using (var database = new Database())
                             {
+                                await database.openDatabaseAsync();
                                 User user = new User(username.Text);
                                 object check = await database.selectUsersDataByUsernameAsync(user, Type.exists);
                                 if (check!= null && !(bool)check) pass = true;
@@ -66,6 +67,7 @@ namespace ChitChat
                     {
                         using (var database = new Database())
                         {
+                            await database.openDatabaseAsync();
                             await database.addUserAsync(user);
                         }
                         MessageBox.Show("You have successfully registered!");
