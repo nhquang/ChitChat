@@ -69,9 +69,9 @@ namespace ChitChat
             {
                 using (var database = new Database())
                 {
-                    bool check = await database.UserExistsAsync(user);
-                    if (check)
-                        if (Utilities.hashPassword(credentials.Item2).Equals(database.userPwd(user)))
+                    object check = await database.selectUsersDataByUsernameAsync(user, Type.exists);
+                    if (check != null && (bool)check)
+                        if (Utilities.hashPassword(credentials.Item2).Equals(await database.selectUsersDataByUsernameAsync(user, Type.password)))
                             return true;
                 }
             }

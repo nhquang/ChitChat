@@ -43,8 +43,8 @@ namespace ChitChat
                             using (var database = new Database())
                             {
                                 User user = new User(username.Text);
-                                bool check = await database.UserExistsAsync(user);
-                                if (!check) pass = true;
+                                object check = await database.selectUsersDataByUsernameAsync(user, Type.exists);
+                                if (check!= null && !(bool)check) pass = true;
                                 else MessageBox.Show("Username already exists.");
                             }
                         }

@@ -9,6 +9,8 @@ using System.Windows.Forms;
 
 namespace ChitChat
 {
+
+    public enum Type { exists, id, name, password, age, gender, note, ip  }
     public class Database : IDisposable
     {
         private SqlConnection sql_ { get; set; }
@@ -36,28 +38,40 @@ namespace ChitChat
             await sqlCommand_.ExecuteNonQueryAsync();
         }
 
-        public async Task<bool> UserExistsAsync(User user)
+        public async Task<object> selectUsersDataByUsernameAsync(User user, Type type) 
         {
+            object rslt = null;
             var data = new Dictionary<string, object>();
             data.Add("@Username", user.username_);
             this.constructStoredProcedure("SelectUser", data);
-            var rslt = await sqlCommand_.ExecuteReaderAsync();
-            bool hasRows = rslt.HasRows;
-            rslt.Close();
-            return hasRows;
-        }
+            var row = await sqlCommand_.ExecuteReaderAsync();
+            switch (type)
+            {
+                case Type.exists:
+                    rslt = row.HasRows;
+                    break;
+                case Type.name:
+                    while (row.Read()) rslt = row.GetString(1);
+                    break;
+                case Type.password:
+                    while (row.Read()) rslt = row.GetString(3);
+                    break;
+                case Type.age:
+                    while (row.Read()) rslt = row.GetString(4);
+                    break;
+                case Type.gender:
+                    while (row.Read()) rslt = row.GetString(5);
+                    break;
+                case Type.note:
+                    while (row.Read()) rslt = row.GetString(6);
+                    break;
+                case Type.ip:
+                    while (row.Read()) rslt = row.IsDBNull(7) ? null : row.GetString(7);
+                    break;
 
-        public string userPwd(User user)
-        {
-            string pwd = string.Empty;
-            var data = new Dictionary<string, object>();
-            data.Add("@Username", user.username_);
-            this.constructStoredProcedure("SelectUser", data);
-            var rslt = sqlCommand_.ExecuteReader();
-            while (rslt.Read())
-                pwd = rslt.GetString(3);
-            rslt.Close();
-            return pwd;
+            }
+            row.Close();
+            return rslt;
         }
 
         public async Task<User> selectUserByUsernameAsync(User user)
@@ -85,18 +99,7 @@ namespace ChitChat
             return user;
         }
 
-        public string userIP(User user)
-        {
-            string ip = string.Empty;
-            var data = new Dictionary<string, object>();
-            data.Add("@username", user.username_);
-            this.constructStoredProcedure("SelectUser", data);
-            var rslt = sqlCommand_.ExecuteReader();
-            while (rslt.Read())
-                ip = rslt.GetString(7);
-            rslt.Close();
-            return ip;
-        }
+        
 
         public async Task<List<User>> selectAllUsersAsync()
         {
