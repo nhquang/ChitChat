@@ -58,7 +58,7 @@ namespace ChitChat
             {
                 Logs logs = new Logs();
                 logs.writeException(ex);
-                MessageBox.Show(ex.Message);
+                //MessageBox.Show(ex.Message);
             }
         }
         private async static Task<bool> authenticationAsync(Tuple<string,string> credentials)

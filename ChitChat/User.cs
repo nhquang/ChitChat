@@ -29,9 +29,7 @@ namespace ChitChat
             else age_ = 0;
             if (male.HasValue) male_ = male.Value;
             note_ = note;
-            if (ip != null) ip_ = IPAddress.Parse(ip);
-            else ip_ = null;
-            
+            ip_ = ip == null ? null : IPAddress.Parse(ip);
         }
         public User(string name, string username, string pass, int? age, bool? male, string note, string ip)
         {
@@ -42,9 +40,8 @@ namespace ChitChat
             else age_ = 0;
             if (male.HasValue) male_ = male.Value;
             note_ = note;
-            if (ip != null) ip_ = IPAddress.Parse(ip);
-            else ip_ = null;
-            
+            ip_ = ip == null ? null : IPAddress.Parse(ip);
+
         }
         public User(string username)
         {
