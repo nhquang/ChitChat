@@ -61,7 +61,7 @@ namespace ChitChat
                         }
                         UserMain.user_.contacts_.Add(temp.id_,temp.username_);
                         UserMain.contactsUsernames.Add(temp.username_);
-                        UserMain.bs_.ResetBindings(false);
+                        UserMain.bs.ResetBindings(false);
 
                         MessageBox.Show("New contact has been added!");
                     }
