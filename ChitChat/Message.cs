@@ -14,13 +14,18 @@ namespace ChitChat
         public string message { get; set; }
         public bool invitation { get; set; }
         public List<string> members { get; set; }
-        public Message(string sender, string receiver, string message, bool invitation, List<string> members = null)
+        public long? groupID { get; set; }
+        public bool accepted { get; set; }
+        public Message(string sender, string receiver, string message, bool invitation, bool accepted, long? groupId = null, List<string> members = null)
         {
             this.sender = sender;
             this.receiver = receiver;
             this.message = message;
             this.invitation = invitation;
+            this.accepted = accepted;
             this.members = members;
+            if (groupId.HasValue) groupID = groupId;
         }
+        
     }
 }

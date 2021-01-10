@@ -27,7 +27,9 @@ namespace ChitChat
 
         public static Dictionary<string, Chatting> ongoingConversations { get; set; }
 
-        public static List<Message> messagesToBeDisplayed { get; set; } 
+        public static List<Message> messagesToBeDisplayed { get; set; }
+
+        public static List<Message> groupMessagesToBeDisplayed { get; set; }
 
         public static List<Message> reservedMessages { get; set; }
 
@@ -55,6 +57,8 @@ namespace ChitChat
             UserMain.reservedMessages = new List<Message>();            //unread messages
 
             UserMain.messagesToBeDisplayed = new List<Message>();
+
+            UserMain.groupMessagesToBeDisplayed = new List<Message>();
 
             UserMain.acceptedInvitations = new Queue<Message>();
 
@@ -121,8 +125,15 @@ namespace ChitChat
                     if (!newMessage.invitation && UserMain.ongoingConversations.ContainsKey(newMessage.sender)) UserMain.messagesToBeDisplayed.Add(newMessage);
                     else if (!newMessage.invitation)
                     {
-                        reservedMessages.Add(newMessage);
-                        notifications.Enqueue(newMessage);
+                        if (!newMessage.groupID.HasValue)
+                        {
+                            reservedMessages.Add(newMessage);
+                            notifications.Enqueue(newMessage);
+                        }
+                        else
+                        {
+                            groupMessagesToBeDisplayed.Add(newMessage);
+                        }
                     }
                     else
                     {
@@ -159,7 +170,7 @@ namespace ChitChat
             }
         }
 
-        private void checkAcceptedInvitation__Tick(object sender, EventArgs e)
+        private async void checkAcceptedInvitation__Tick(object sender, EventArgs e)
         {
             Message message = null;
             try
@@ -168,13 +179,22 @@ namespace ChitChat
                 {
                     message = acceptedInvitations.Dequeue();
                     message.members.Add(UserMain.user_.username_);
-                    var groupChat = new GroupChat(message.members);
+                    IPAddress recipentIP = null;
+                    using(var database = new Database())
+                    {
+                        await database.openDatabaseAsync();
+                        var retrievedIP = (string) await database.selectUsersDataByUsernameAsync(new User(message.sender), Type.ip);
+                        recipentIP = IPAddress.Parse(retrievedIP);
+                    }
+                    Listener.outgoingMessages.TryAdd(new Tuple<IPEndPoint, Message>(new IPEndPoint(recipentIP, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), new Message(UserMain.user_.username_, message.sender, "", false, true, message.groupID, message.members)));
+                    var groupChat = new GroupChat(message.groupID.Value, message.members);
                     ongoingGroupConversations.Add(groupChat);
                     groupChat.Show();
                 }
             }
             catch(Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 Logs logs = new Logs();
                 logs.writeException(ex);
             }
@@ -279,10 +299,11 @@ namespace ChitChat
                 if (contacts.SelectedItem != null)
                 {
                     var temp = contacts.SelectedItem.ToString();
-                    var msg = new Message(UserMain.user_.username_, temp, $"{ UserMain.user_.username_} wants to invite you to a group chat!!!", true, new List<string>() { UserMain.user_.username_ });
+                    var id = DateTime.UtcNow.Ticks;
+                    var msg = new Message(UserMain.user_.username_, temp, $"{ UserMain.user_.username_} wants to invite you to a group chat!!!", true, false, id, new List<string>() { UserMain.user_.username_ });
                     var recipent = await User.load_UserAsync(new User(temp));
                     Listener.outgoingMessages.TryAdd(new Tuple<IPEndPoint, Message>(new IPEndPoint(recipent.ip_, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), msg));
-                    var grpChat = new GroupChat(new List<string>() { UserMain.user_.username_ });
+                    var grpChat = new GroupChat(id, new List<string>() { UserMain.user_.username_ });
                     UserMain.ongoingGroupConversations.Add(grpChat);
                     grpChat.Show();
                 }

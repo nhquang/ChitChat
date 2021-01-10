@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.content = new System.Windows.Forms.RichTextBox();
             this.sendBtn = new System.Windows.Forms.Button();
             this.welcomeLbl = new System.Windows.Forms.Label();
             this.send = new System.Windows.Forms.RichTextBox();
             this.members = new System.Windows.Forms.ListBox();
             this.inviteBtn = new System.Windows.Forms.Button();
+            this.displayMessages = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // content
@@ -66,6 +68,7 @@
             this.sendBtn.TabIndex = 11;
             this.sendBtn.Text = "Send";
             this.sendBtn.UseVisualStyleBackColor = false;
+            this.sendBtn.Click += new System.EventHandler(this.sendBtn_Click);
             // 
             // welcomeLbl
             // 
@@ -147,5 +150,6 @@
         private System.Windows.Forms.RichTextBox send;
         private System.Windows.Forms.ListBox members;
         private System.Windows.Forms.Button inviteBtn;
+        private System.Windows.Forms.Timer displayMessages;
     }
 }
