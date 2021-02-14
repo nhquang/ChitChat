@@ -16,7 +16,8 @@ namespace ChitChat
         public List<string> members { get; set; }
         public long? groupID { get; set; }
         public bool accepted { get; set; }
-        public Message(string sender, string receiver, string message, bool invitation, bool accepted, long? groupId = null, List<string> members = null)
+        public bool leave { get; set; }
+        public Message(string sender, string receiver, string message, bool invitation, bool accepted, bool leave, long? groupId = null, List<string> members = null)
         {
             this.sender = sender;
             this.receiver = receiver;
@@ -24,6 +25,7 @@ namespace ChitChat
             this.invitation = invitation;
             this.accepted = accepted;
             this.members = members;
+            this.leave = leave;
             if (groupId.HasValue) groupID = groupId;
         }
         

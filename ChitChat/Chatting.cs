@@ -154,7 +154,7 @@ namespace ChitChat
             {
                 if (!string.IsNullOrWhiteSpace(send.Text) || !string.IsNullOrEmpty(send.Text))
                 {
-                    var package = new Tuple<IPEndPoint, Message>(new IPEndPoint(this.chattingWith_.ip_, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), new Message(UserMain.user_.username_, this.chattingWith_.username_, send.Text.Trim('\n'), false, false));
+                    var package = new Tuple<IPEndPoint, Message>(new IPEndPoint(this.chattingWith_.ip_, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), new Message(UserMain.user_.username_, this.chattingWith_.username_, send.Text.Trim('\n'), false, false, false));
                     Listener.outgoingMessages.TryAdd(package);
                     this.content.Text += "Me: " + send.Text.Trim('\n') + "\n";
                     this.send.Text = string.Empty;

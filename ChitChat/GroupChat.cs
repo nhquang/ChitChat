@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -43,16 +45,21 @@ namespace ChitChat
                 {
                     if (UserMain.groupMessagesToBeDisplayed[i].groupID == this.id)
                     {
-                        if (!UserMain.groupMessagesToBeDisplayed[i].accepted)
+                        if (!UserMain.groupMessagesToBeDisplayed[i].accepted && !UserMain.groupMessagesToBeDisplayed[i].leave)
                             content.Text += $"{UserMain.groupMessagesToBeDisplayed[i].sender}: {UserMain.groupMessagesToBeDisplayed[i].message.Trim()}\n";
 
-                        else
+                        else if(UserMain.groupMessagesToBeDisplayed[i].accepted)
                         {
                             int temp = UserMain.groupMessagesToBeDisplayed[i].members.Count - this.membersList.Count;
                             for(int j = UserMain.groupMessagesToBeDisplayed[i].members.Count - 1 - temp + 1; temp > 0; temp--) {
                                 this.membersList.Add(UserMain.groupMessagesToBeDisplayed[i].members[j]);
                                 j--;
                             }
+                            groupMemberSource.ResetBindings(false);
+                        }
+                        else if (UserMain.groupMessagesToBeDisplayed[i].leave)
+                        {
+                            this.membersList.Remove(UserMain.groupMessagesToBeDisplayed[i].sender);
                             groupMemberSource.ResetBindings(false);
                         }
                         UserMain.groupMessagesToBeDisplayed.RemoveAt(i);
@@ -66,9 +73,22 @@ namespace ChitChat
             }
         }
 
-        protected override void OnClosed(EventArgs e)
+        protected override async void OnClosed(EventArgs e)
         {
             displayMessages.Stop();
+            using (var database = new Database())
+            {
+                await database.openDatabaseAsync();
+                foreach (var item in this.membersList)
+                {
+                    if (!item.Equals(UserMain.user_.username_))
+                    {
+                        var temp = new Message(UserMain.user_.username_, item, string.Empty, false, false, true, this.id);
+                        var ip = await database.selectUsersDataByUsernameAsync(new User(item), Type.ip);
+                        Listener.outgoingMessages.TryAdd(new Tuple<System.Net.IPEndPoint, Message>(new IPEndPoint(IPAddress.Parse((string)ip), Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), temp));
+                    }
+                }
+            }
             UserMain.ongoingGroupConversations.Remove(this);
             base.OnClosed(e);
         }

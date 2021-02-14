@@ -189,7 +189,7 @@ namespace ChitChat
                         var retrievedIP = (string) await database.selectUsersDataByUsernameAsync(new User(message.sender), Type.ip);
                         recipentIP = IPAddress.Parse(retrievedIP);
                     }
-                    Listener.outgoingMessages.TryAdd(new Tuple<IPEndPoint, Message>(new IPEndPoint(recipentIP, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), new Message(UserMain.user_.username_, message.sender, "", false, true, message.groupID, message.members)));
+                    Listener.outgoingMessages.TryAdd(new Tuple<IPEndPoint, Message>(new IPEndPoint(recipentIP, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), new Message(UserMain.user_.username_, message.sender, "", false, true, false, message.groupID, message.members)));
                     var groupChat = new GroupChat(message.groupID.Value, message.members);
                     ongoingGroupConversations.Add(groupChat);
                     groupChat.Show();
@@ -305,7 +305,7 @@ namespace ChitChat
                 {
                     var temp = contacts.SelectedItem.ToString();
                     var id = DateTime.UtcNow.Ticks;
-                    var msg = new Message(UserMain.user_.username_, temp, $"{ UserMain.user_.username_} wants to invite you to a group chat!!!", true, false, id, new List<string>() { UserMain.user_.username_ });
+                    var msg = new Message(UserMain.user_.username_, temp, $"{ UserMain.user_.username_} wants to invite you to a group chat!!!", true, false, false, id, new List<string>() { UserMain.user_.username_ });
                     var recipent = await User.load_UserAsync(new User(temp));
                     Listener.outgoingMessages.TryAdd(new Tuple<IPEndPoint, Message>(new IPEndPoint(recipent.ip_, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), msg));
                     var grpChat = new GroupChat(id, new List<string>() { UserMain.user_.username_ });
