@@ -75,33 +75,58 @@ namespace ChitChat
 
         protected override async void OnClosed(EventArgs e)
         {
-            displayMessages.Stop();
-            using (var database = new Database())
+            try
             {
-                await database.openDatabaseAsync();
-                foreach (var item in this.membersList)
+                displayMessages.Stop();
+                using (var database = new Database())
                 {
-                    if (!item.Equals(UserMain.user_.username_))
+                    await database.openDatabaseAsync();
+                    foreach (var item in this.membersList)
                     {
-                        var temp = new Message(UserMain.user_.username_, item, string.Empty, false, false, true, this.id);
-                        var ip = await database.selectUsersDataByUsernameAsync(new User(item), Type.ip);
-                        Listener.outgoingMessages.TryAdd(new Tuple<System.Net.IPEndPoint, Message>(new IPEndPoint(IPAddress.Parse((string)ip), Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), temp));
+                        if (!item.Equals(UserMain.user_.username_))
+                        {
+                            var temp = new Message(UserMain.user_.username_, item, string.Empty, false, false, true, this.id);
+                            var ip = await database.selectUsersDataByUsernameAsync(new User(item), Type.ip);
+                            Listener.outgoingMessages.TryAdd(new Tuple<System.Net.IPEndPoint, Message>(new IPEndPoint(IPAddress.Parse((string)ip), Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), temp));
+                        }
                     }
                 }
+                UserMain.ongoingGroupConversations.Remove(this);
+                base.OnClosed(e);
+            }catch(Exception ex)
+            {
+                Logs logs = new Logs();
+                logs.writeException(ex);
             }
-            UserMain.ongoingGroupConversations.Remove(this);
-            base.OnClosed(e);
         }
 
-        private void sendBtn_Click(object sender, EventArgs e)
+        private async void sendBtn_Click(object sender, EventArgs e)
         {
             try
             {
-
+                if (!string.IsNullOrWhiteSpace(send.Text) || !string.IsNullOrEmpty(send.Text))
+                {
+                    using (var database = new Database())
+                    {
+                        await database.openDatabaseAsync();
+                        foreach (var item in this.membersList)
+                        {
+                            if (!item.Equals(UserMain.user_.username_))
+                            {
+                                var ip = IPAddress.Parse((string)await database.selectUsersDataByUsernameAsync(new User(item), Type.ip));
+                                var package = new Tuple<IPEndPoint, Message>(new IPEndPoint(ip, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), new Message(UserMain.user_.username_, item, send.Text.Trim('\n'), false, false, false, this.id));
+                                Listener.outgoingMessages.TryAdd(package);
+                            }
+                        }
+                    }
+                    this.content.Text += "Me: " + send.Text.Trim('\n') + "\n";
+                    this.send.Text = string.Empty;
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-
+                Logs logs = new Logs();
+                logs.writeException(ex);
             }
         }
     }
