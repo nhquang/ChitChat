@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
 using System.Configuration;
+using System.Collections.Concurrent;
 
 namespace ChitChat
 {
@@ -33,7 +34,7 @@ namespace ChitChat
 
         public static List<Message> reservedMessages { get; set; }
 
-        public static Queue<Message> acceptedInvitations { get; set; }
+        public static ConcurrentQueue<Message> acceptedInvitations { get; set; }
 
         public static Queue<Message> notifications { get; set; }
 
@@ -60,7 +61,7 @@ namespace ChitChat
 
             UserMain.groupMessagesToBeDisplayed = new List<Message>();
 
-            UserMain.acceptedInvitations = new Queue<Message>();
+            UserMain.acceptedInvitations = new ConcurrentQueue<Message>();
 
             bs = new BindingSource();
 
@@ -137,9 +138,11 @@ namespace ChitChat
                     }
                     else
                     {
-                        DialogResult dialogResult = MessageBox.Show(newMessage.message, "Invitation", MessageBoxButtons.YesNo);
-                        if (dialogResult == DialogResult.Yes)
-                            acceptedInvitations.Enqueue(newMessage);
+                        Task.Run(() => {
+                            DialogResult dialogResult = MessageBox.Show(newMessage.message, "Invitation", MessageBoxButtons.YesNo);
+                            if (dialogResult == DialogResult.Yes) acceptedInvitations.Enqueue(newMessage);
+                        });
+                        
                     }
                 }
             }
@@ -177,7 +180,7 @@ namespace ChitChat
             {
                 if(acceptedInvitations.Count > 0)
                 {
-                    message = acceptedInvitations.Dequeue();
+                    acceptedInvitations.TryDequeue(out message);
                     message.members.Add(UserMain.user_.username_);
                     IPAddress recipentIP = null;
                     using(var database = new Database())
@@ -244,6 +247,8 @@ namespace ChitChat
 
             UserMain.contactsUsernames.Clear();
             UserMain.contactsUsernames = null;
+
+            UserMain.acceptedInvitations = null;
 
             UserMain.ongoingConversations.Clear();
             UserMain.ongoingConversations = null;

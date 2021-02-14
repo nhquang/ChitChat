@@ -44,15 +44,18 @@ namespace ChitChat
                     if (UserMain.groupMessagesToBeDisplayed[i].groupID == this.id)
                     {
                         if (!UserMain.groupMessagesToBeDisplayed[i].accepted)
-                        {
                             content.Text += $"{UserMain.groupMessagesToBeDisplayed[i].sender}: {UserMain.groupMessagesToBeDisplayed[i].message.Trim()}\n";
-                            UserMain.groupMessagesToBeDisplayed.RemoveAt(i);
-                        }
+
                         else
                         {
-                            this.membersList = UserMain.groupMessagesToBeDisplayed[i].members;
+                            int temp = UserMain.groupMessagesToBeDisplayed[i].members.Count - this.membersList.Count;
+                            for(int j = UserMain.groupMessagesToBeDisplayed[i].members.Count - 1 - temp + 1; temp > 0; temp--) {
+                                this.membersList.Add(UserMain.groupMessagesToBeDisplayed[i].members[j]);
+                                j--;
+                            }
                             groupMemberSource.ResetBindings(false);
                         }
+                        UserMain.groupMessagesToBeDisplayed.RemoveAt(i);
                     }
                 }
             }
