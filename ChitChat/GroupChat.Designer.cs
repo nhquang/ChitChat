@@ -123,6 +123,7 @@
             this.inviteBtn.TabIndex = 14;
             this.inviteBtn.Text = "Invite";
             this.inviteBtn.UseVisualStyleBackColor = false;
+            this.inviteBtn.Click += new System.EventHandler(this.inviteBtn_Click);
             // 
             // GroupChat
             // 
@@ -138,7 +139,6 @@
             this.Name = "GroupChat";
             this.Text = "GroupChat";
             this.ResumeLayout(false);
-            this.Load += GroupChat_Load;
 
         }
 

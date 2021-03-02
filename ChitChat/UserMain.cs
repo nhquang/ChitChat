@@ -265,7 +265,7 @@ namespace ChitChat
             UserMain.messagesToBeDisplayed.Clear();
             UserMain.messagesToBeDisplayed = null;
 
-
+            bs.Dispose();
             this.Dispose();
             base.OnClosed(e);
 

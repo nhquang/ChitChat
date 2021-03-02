@@ -129,5 +129,11 @@ namespace ChitChat
                 logs.writeException(ex);
             }
         }
+
+        private void inviteBtn_Click(object sender, EventArgs e)
+        {
+            var invi = new Invite(membersList, id);
+            invi.ShowDialog();
+        }
     }
 }

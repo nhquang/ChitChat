@@ -152,6 +152,7 @@ namespace ChitChat
 
         private void constructStoredProcedure(string proc, Dictionary<string,object> parameters)
         {
+            sqlCommand_?.Dispose();
             sqlCommand_ = new SqlCommand(proc, sql_);
             sqlCommand_.CommandType = System.Data.CommandType.StoredProcedure;
             foreach(var item in parameters)
