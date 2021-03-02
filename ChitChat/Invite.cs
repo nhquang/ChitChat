@@ -24,7 +24,7 @@ namespace ChitChat
             this.currentMembersList_ = currentMembersList;
             InitializeComponent();
         }
-        private async void Invite_Load(object sender, EventArgs e)
+        private void Invite_Load(object sender, EventArgs e)
         {
             this.MaximizeBox = false;
             this.AcceptButton = this.sendInvi;
