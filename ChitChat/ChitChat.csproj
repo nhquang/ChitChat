@@ -92,6 +92,18 @@
       <DependentUpon>Chatting.cs</DependentUpon>
     </Compile>
     <Compile Include="Database.cs" />
+    <Compile Include="GroupChat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GroupChat.Designer.cs">
+      <DependentUpon>GroupChat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Invite.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Invite.Designer.cs">
+      <DependentUpon>Invite.cs</DependentUpon>
+    </Compile>
     <Compile Include="Listener.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -135,6 +147,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Chatting.resx">
       <DependentUpon>Chatting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GroupChat.resx">
+      <DependentUpon>GroupChat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Invite.resx">
+      <DependentUpon>Invite.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

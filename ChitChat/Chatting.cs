@@ -60,20 +60,29 @@ namespace ChitChat
 
         void displayUnreadMessages()
         {
-            var temp = new List<int>();
-            foreach(var message in UserMain.reservedMessages)
+            try
             {
-                int i = 0;
-                if (message.sender.Equals(this.chattingWith_.username_))
+                var temp = new List<int>();
+                foreach (var message in UserMain.reservedMessages)
                 {
-                    this.content.Text += chattingWith_.username_ + ": " + message.message.Trim() + "\n";
-                    temp.Add(i);
+                    int i = 0;
+                    if (message.sender.Equals(this.chattingWith_.username_))
+                    {
+                        //this.content.Text += chattingWith_.username_ + ": " + message.message.Trim() + "\n";
+                        this.content.Text += $"{chattingWith_.username_}: {message.message.Trim()}\n";
+                        temp.Add(i);
+                    }
+                    i++;
                 }
-                i++;
+                foreach (var idx in temp)
+                {
+                    UserMain.reservedMessages.RemoveAt(idx);
+                }
             }
-            foreach(var idx in temp)
+            catch(Exception ex)
             {
-                UserMain.reservedMessages.RemoveAt(idx);
+                Logs logs = new Logs();
+                logs.writeException(ex);
             }
         }
 
@@ -145,7 +154,7 @@ namespace ChitChat
             {
                 if (!string.IsNullOrWhiteSpace(send.Text) || !string.IsNullOrEmpty(send.Text))
                 {
-                    var package = new Tuple<IPEndPoint, Message>(new IPEndPoint(this.chattingWith_.ip_, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), new Message(UserMain.user_.username_, this.chattingWith_.username_, send.Text.Trim('\n')));
+                    var package = new Tuple<IPEndPoint, Message>(new IPEndPoint(this.chattingWith_.ip_, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), new Message(UserMain.user_.username_, this.chattingWith_.username_, send.Text.Trim('\n'), false, false, false));
                     Listener.outgoingMessages.TryAdd(package);
                     this.content.Text += "Me: " + send.Text.Trim('\n') + "\n";
                     this.send.Text = string.Empty;

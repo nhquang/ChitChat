@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
+using System.Configuration;
+using System.Collections.Concurrent;
 
 namespace ChitChat
 {
@@ -18,17 +20,21 @@ namespace ChitChat
 
         private Listener listener_ { get; set; }
 
-        public static BindingSource bs_ { get; set; }
+        public static BindingSource bs { get; set; }
 
         public static List<string> contactsUsernames { get; set; }
 
-        //public static List<string> ongoingConversations { get; set; }
+        public static List<GroupChat> ongoingGroupConversations { get; set; }
 
         public static Dictionary<string, Chatting> ongoingConversations { get; set; }
 
-        public static List<Message> messagesToBeDisplayed { get; set; } 
+        public static List<Message> messagesToBeDisplayed { get; set; }
+
+        public static List<Message> groupMessagesToBeDisplayed { get; set; }
 
         public static List<Message> reservedMessages { get; set; }
+
+        public static ConcurrentQueue<Message> acceptedInvitations { get; set; }
 
         public static Queue<Message> notifications { get; set; }
 
@@ -45,17 +51,25 @@ namespace ChitChat
 
             UserMain.ongoingConversations = new Dictionary<string, Chatting>();
 
+            UserMain.ongoingGroupConversations = new List<GroupChat>();
+
             UserMain.notifications = new Queue<Message>();
 
             UserMain.reservedMessages = new List<Message>();            //unread messages
 
             UserMain.messagesToBeDisplayed = new List<Message>();
 
-            bs_ = new BindingSource();
+            UserMain.groupMessagesToBeDisplayed = new List<Message>();
+
+            UserMain.acceptedInvitations = new ConcurrentQueue<Message>();
+
+            bs = new BindingSource();
 
             organizeMessages_.Tick += OrganizeMessages__Tick;
 
             checkNoti_.Tick += CheckNoti__Tick;
+
+            this.checkAcceptedInvitation_.Tick += checkAcceptedInvitation__Tick;
         }
 
         
@@ -83,8 +97,8 @@ namespace ChitChat
                 //await Task.Run(() => this.load_ContactList());
 
                 UserMain.contactsUsernames = UserMain.user_.contacts_.Values.ToList();
-                bs_.DataSource = UserMain.contactsUsernames;
-                this.contacts.DataSource = bs_;
+                bs.DataSource = UserMain.contactsUsernames;
+                this.contacts.DataSource = bs;
                 if(contactsUsernames.Count != 0)this.contacts.SetSelected(0, true);
 
                 this.listener_ = new Listener();
@@ -92,7 +106,7 @@ namespace ChitChat
 
                 organizeMessages_.Start();
                 checkNoti_.Start();
-
+                checkAcceptedInvitation_.Start();
                 
             }
             catch(Exception ex)
@@ -109,11 +123,26 @@ namespace ChitChat
             {
                 if (Listener.incomingMessages.TryTake(out Message newMessage) && newMessage.receiver.Equals(UserMain.user_.username_))
                 {
-                    if (UserMain.ongoingConversations.ContainsKey(newMessage.sender)) UserMain.messagesToBeDisplayed.Add(newMessage);
+                    if (!newMessage.invitation && UserMain.ongoingConversations.ContainsKey(newMessage.sender)) UserMain.messagesToBeDisplayed.Add(newMessage);
+                    else if (!newMessage.invitation)
+                    {
+                        if (!newMessage.groupID.HasValue)
+                        {
+                            reservedMessages.Add(newMessage);
+                            notifications.Enqueue(newMessage);
+                        }
+                        else
+                        {
+                            groupMessagesToBeDisplayed.Add(newMessage);
+                        }
+                    }
                     else
                     {
-                        reservedMessages.Add(newMessage);
-                        notifications.Enqueue(newMessage);
+                        Task.Run(() => {
+                            DialogResult dialogResult = MessageBox.Show(newMessage.message, "Invitation", MessageBoxButtons.YesNo);
+                            if (dialogResult == DialogResult.Yes) acceptedInvitations.Enqueue(newMessage);
+                        });
+                        
                     }
                 }
             }
@@ -144,6 +173,36 @@ namespace ChitChat
             }
         }
 
+        private async void checkAcceptedInvitation__Tick(object sender, EventArgs e)
+        {
+            Message message = null;
+            try
+            {
+                if(acceptedInvitations.Count > 0)
+                {
+                    acceptedInvitations.TryDequeue(out message);
+                    message.members.Add(UserMain.user_.username_);
+                    IPAddress recipentIP = null;
+                    using(var database = new Database())
+                    {
+                        await database.openDatabaseAsync();
+                        var retrievedIP = (string) await database.selectUsersDataByUsernameAsync(new User(message.sender), Type.ip);
+                        recipentIP = IPAddress.Parse(retrievedIP);
+                    }
+                    Listener.outgoingMessages.TryAdd(new Tuple<IPEndPoint, Message>(new IPEndPoint(recipentIP, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), new Message(UserMain.user_.username_, message.sender, "", false, true, false, message.groupID, message.members)));
+                    var groupChat = new GroupChat(message.groupID.Value, message.members);
+                    ongoingGroupConversations.Add(groupChat);
+                    groupChat.Show();
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Logs logs = new Logs();
+                logs.writeException(ex);
+            }
+        }
+
         /*private async Task load_ContactList()
         {
             User user = null;
@@ -167,9 +226,17 @@ namespace ChitChat
             checkNoti_.Stop();
             checkNoti_.Dispose();
 
+            checkAcceptedInvitation_.Stop();
+            checkAcceptedInvitation_.Dispose();
+
             for(int i = UserMain.ongoingConversations.Count - 1; i >= 0; i--)
             {
                 UserMain.ongoingConversations.ElementAt(i).Value.Close();
+            }
+
+            for(int i = 0; i < UserMain.ongoingGroupConversations.Count; i++)
+            {
+                ongoingGroupConversations[i].Close();
             }
 
             listener_?.OnStopAccessor();
@@ -181,8 +248,13 @@ namespace ChitChat
             UserMain.contactsUsernames.Clear();
             UserMain.contactsUsernames = null;
 
+            UserMain.acceptedInvitations = null;
+
             UserMain.ongoingConversations.Clear();
             UserMain.ongoingConversations = null;
+
+            UserMain.ongoingGroupConversations.Clear();
+            UserMain.ongoingGroupConversations = null;
 
             UserMain.notifications.Clear();
             UserMain.notifications = null;
@@ -193,7 +265,7 @@ namespace ChitChat
             UserMain.messagesToBeDisplayed.Clear();
             UserMain.messagesToBeDisplayed = null;
 
-
+            bs.Dispose();
             this.Dispose();
             base.OnClosed(e);
 
@@ -224,5 +296,32 @@ namespace ChitChat
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private async void createGrpChat_btn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (contacts.SelectedItem != null)
+                {
+                    var temp = contacts.SelectedItem.ToString();
+                    var id = DateTime.UtcNow.Ticks;
+                    var msg = new Message(UserMain.user_.username_, temp, $"{ UserMain.user_.username_} wants to invite you to a group chat!!!", true, false, false, id, new List<string>() { UserMain.user_.username_ });
+                    var recipent = await User.load_UserAsync(new User(temp));
+                    Listener.outgoingMessages.TryAdd(new Tuple<IPEndPoint, Message>(new IPEndPoint(recipent.ip_, Convert.ToInt16(ConfigurationSettings.AppSettings["port"].Trim())), msg));
+                    var grpChat = new GroupChat(id, new List<string>() { UserMain.user_.username_ });
+                    UserMain.ongoingGroupConversations.Add(grpChat);
+                    grpChat.Show();
+                }
+            }
+            catch(Exception ex)
+            {
+                Logs logs = new Logs();
+                logs.writeException(ex);
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        
     }
 }
